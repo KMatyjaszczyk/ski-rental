@@ -2,6 +2,7 @@ package pl.itkurnik.skirental.domain.user;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
+import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.role.Role;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,4 +52,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "user")
+    private Set<ReservationUserItem> reservationUserItems = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Rent> rents = new LinkedHashSet<>();
+
 }
