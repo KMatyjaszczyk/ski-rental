@@ -172,11 +172,11 @@ alter table "payment_method" add constraint "payment_method_pk" primary key ("id
 alter table "payment_method" add constraint "payment_method_name_uq" unique ("name");
 
 create table if not exists "rent" (
-                                      "id" serial,
+    "id" serial,
     "rent_date" time not null,
     "planned_return_date" date not null,
     "end_date" time,
-    "customer_id" int4 not null,
+    "client_id" int4 not null,
     "rent_status_id" int4 not null,
     "client_document_type_id" int4 not null,
     "client_document_number" varchar(20) not null,
@@ -185,7 +185,7 @@ create table if not exists "rent" (
     "deleted" bool not null default false
     );
 alter table "rent" add constraint "rent_pk" primary key ("id");
-alter table "rent" add constraint "rent_customer_fk" foreign key("customer_id") references "user"("id")
+alter table "rent" add constraint "rent_client_fk" foreign key("client_id") references "user"("id")
     on update cascade on delete restrict;
 alter table "rent" add constraint "rent_rent_status_fk" foreign key("rent_status_id") references "rent_status"("id")
     on update cascade on delete restrict;

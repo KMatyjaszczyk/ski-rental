@@ -36,8 +36,8 @@ public class Rent {
     private LocalTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private User customer;
+    @JoinColumn(name = "client_id", nullable = false)
+    private User client;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "rent_status_id", nullable = false)
