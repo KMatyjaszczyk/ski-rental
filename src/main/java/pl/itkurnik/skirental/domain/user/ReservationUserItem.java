@@ -1,11 +1,16 @@
 package pl.itkurnik.skirental.domain.user;
 
+import lombok.*;
 import pl.itkurnik.skirental.domain.item.Item;
-import pl.itkurnik.skirental.domain.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "reservation_user_item")
 public class ReservationUserItem {
@@ -27,45 +32,4 @@ public class ReservationUserItem {
 
     @Column(name = "reserved_to", nullable = false)
     private LocalDate reservedTo;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public LocalDate getReservedFrom() {
-        return reservedFrom;
-    }
-
-    public void setReservedFrom(LocalDate reservedFrom) {
-        this.reservedFrom = reservedFrom;
-    }
-
-    public LocalDate getReservedTo() {
-        return reservedTo;
-    }
-
-    public void setReservedTo(LocalDate reservedTo) {
-        this.reservedTo = reservedTo;
-    }
-
 }

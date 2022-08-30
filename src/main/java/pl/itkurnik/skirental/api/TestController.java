@@ -39,8 +39,8 @@ public class TestController {
 //
 //        roleRepository.save(role);
 
-        Role employeeRole = roleRepository.findByName("EMPLOYEE").orElseThrow(() -> new RuntimeException("Role not found"));
-        User user = userRepository.findById(1).orElseThrow(() -> new RuntimeException("User not found"));
+//        Role employeeRole = roleRepository.findByName("EMPLOYEE").orElseThrow(() -> new RuntimeException("Role not found"));
+//        User user = userRepository.findById(1).orElseThrow(() -> new RuntimeException("User not found"));
 //        user.getRoles().add(employeeRole);
 //        userRepository.save(user);
 
