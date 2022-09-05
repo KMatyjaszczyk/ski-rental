@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.security;
+package pl.itkurnik.skirental.security.util;
 
 import pl.itkurnik.skirental.domain.role.Role;
 

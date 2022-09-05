@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.itkurnik.skirental.security.JwtUtil;
-import pl.itkurnik.skirental.security.MyUserDetailsService;
 import pl.itkurnik.skirental.security.model.AuthenticationRequest;
 import pl.itkurnik.skirental.security.model.AuthenticationResponse;
+import pl.itkurnik.skirental.security.util.JwtUtil;
+import pl.itkurnik.skirental.security.util.MyUserDetailsService;
 
 @RestController
 @RequestMapping("/api/auth")

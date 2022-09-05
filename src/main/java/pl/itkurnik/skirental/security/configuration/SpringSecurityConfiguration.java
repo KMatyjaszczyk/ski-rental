@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.security;
+package pl.itkurnik.skirental.security.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -8,10 +8,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.security.filter.JwtRequestFilter;
+import pl.itkurnik.skirental.security.util.ApiEndpoints;
+import pl.itkurnik.skirental.security.util.MyUserDetailsService;
 
 @Configuration
 @RequiredArgsConstructor
@@ -32,8 +33,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/auth/*").permitAll()
-                .antMatchers("/api/test*").hasAuthority("EMPLOYEE")
+                .antMatchers(ApiEndpoints.PUBLIC).permitAll()
+                .antMatchers(ApiEndpoints.SWAGGER).permitAll()
+                .antMatchers(ApiEndpoints.EMPLOYEE).hasAuthority(Constants.EMPLOYEE_AUTH_NAME)
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

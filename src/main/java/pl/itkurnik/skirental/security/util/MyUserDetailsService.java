@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.security;
+package pl.itkurnik.skirental.security.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

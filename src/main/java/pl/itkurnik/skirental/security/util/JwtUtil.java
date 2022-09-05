@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.security;
+package pl.itkurnik.skirental.security.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

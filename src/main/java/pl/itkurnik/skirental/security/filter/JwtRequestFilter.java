@@ -9,9 +9,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pl.itkurnik.skirental.api.Constants;
-import pl.itkurnik.skirental.security.JwtUtil;
-import pl.itkurnik.skirental.security.MyUserDetailsService;
-
+import pl.itkurnik.skirental.security.util.JwtUtil;
+import pl.itkurnik.skirental.security.util.MyUserDetailsService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

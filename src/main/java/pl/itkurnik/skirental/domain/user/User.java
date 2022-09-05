@@ -2,8 +2,8 @@ package pl.itkurnik.skirental.domain.user;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
-import pl.itkurnik.skirental.domain.role.Role;
 import pl.itkurnik.skirental.domain.rent.Rent;
+import pl.itkurnik.skirental.domain.role.Role;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;

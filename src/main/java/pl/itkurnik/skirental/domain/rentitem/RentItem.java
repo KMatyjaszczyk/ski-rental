@@ -2,8 +2,8 @@ package pl.itkurnik.skirental.domain.rentitem;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
-import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.item.Item;
+import pl.itkurnik.skirental.domain.rent.Rent;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

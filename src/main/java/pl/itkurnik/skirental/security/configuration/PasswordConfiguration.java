@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.security;
+package pl.itkurnik.skirental.security.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
