@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
-import pl.itkurnik.skirental.domain.user.exception.PhoneNumberNotUniqueException;
-import pl.itkurnik.skirental.domain.user.exception.UserAlreadyExistsException;
+import pl.itkurnik.skirental.domain.user.exception.UserWithPhoneNumberAlreadyRegistered;
+import pl.itkurnik.skirental.domain.user.exception.EmailAlreadyTakenException;
 import pl.itkurnik.skirental.util.ErrorMessagesBuilder;
 
 import java.util.ArrayList;
@@ -87,17 +87,22 @@ public class CreateRegisteredUserValidator {
         }
     }
 
-    public void validateIfUserExists(String email) {
+    public void validateIfEmailIsAlreadyTaken(String email) {
         Optional<User> userByEmail = userRepository.findByEmail(email);
         if (userByEmail.isPresent()) {
-            throw new UserAlreadyExistsException(email);
+            throw new EmailAlreadyTakenException(email);
         }
     }
 
-    public void validatePhoneNumberUniqueness(String phoneNumber) {
+    public void validateIfUserWithPhoneNumberIsAlreadyRegistered(String phoneNumber) {
         Optional<User> userByPhoneNumber = userRepository.findByPhoneNumber(phoneNumber);
-        if (userByPhoneNumber.isPresent()) {
-            throw new PhoneNumberNotUniqueException(phoneNumber);
+
+        userByPhoneNumber.ifPresent(this::validateIfIsRegistered);
+    }
+
+    private void validateIfIsRegistered(User user) {
+        if (user.getIsRegistered()) {
+            throw new UserWithPhoneNumberAlreadyRegistered(user.getPhoneNumber());
         }
     }
 }

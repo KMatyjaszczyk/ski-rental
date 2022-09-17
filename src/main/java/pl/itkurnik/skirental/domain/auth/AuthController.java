@@ -45,7 +45,7 @@ public class AuthController {
     public ResponseEntity<Void> register(@RequestBody CreateRegisteredUserRequest request) {
         log.info("Registering user {} {}", request.getName(), request.getSurname());
 
-        userService.registerUser(request);
+        userService.processUserRegistration(request);
         return ResponseEntity.ok().build();
     }
 

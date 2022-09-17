@@ -23,12 +23,35 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public void registerUser(CreateRegisteredUserRequest request) {
+    public void processUserRegistration(CreateRegisteredUserRequest request) {
         validator.validateRequestData(request);
-        validator.validateIfUserExists(request.getEmail());
-        validator.validatePhoneNumberUniqueness(request.getPhoneNumber());
+        validator.validateIfEmailIsAlreadyTaken(request.getEmail());
+        validator.validateIfUserWithPhoneNumberIsAlreadyRegistered(request.getPhoneNumber());
+
+        registerUser(request);
+    }
+
+    private void registerUser(CreateRegisteredUserRequest request) {
+        Optional<User> userByPhoneNumber = userRepository.findByPhoneNumber(request.getPhoneNumber());
+        if (userByPhoneNumber.isPresent()) {
+            makeUserRegistered(userByPhoneNumber.get(), request);
+            return;
+        }
 
         createRegisteredUser(request);
+    }
+
+    private void makeUserRegistered(User userByPhoneNumber, CreateRegisteredUserRequest request) {
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        userByPhoneNumber.setName(request.getName());
+        userByPhoneNumber.setSurname(request.getSurname());
+        userByPhoneNumber.setEmail(request.getEmail());
+        userByPhoneNumber.setPassword(encodedPassword);
+        userByPhoneNumber.setIsRegistered(Boolean.TRUE);
+
+        userRepository.save(userByPhoneNumber);
+
     }
 
     private void createRegisteredUser(CreateRegisteredUserRequest request) {
@@ -46,7 +69,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private Role getClientRole() {
+    private Role getClientRole() { // TODO KM move this method to RoleService
         String clientRoleName = Roles.CLIENT.getName();
 
         return roleService.findByName(clientRoleName)
