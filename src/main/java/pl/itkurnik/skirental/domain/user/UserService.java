@@ -3,10 +3,7 @@ package pl.itkurnik.skirental.domain.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.itkurnik.skirental.domain.role.Role;
 import pl.itkurnik.skirental.domain.role.RoleService;
-import pl.itkurnik.skirental.domain.role.Roles;
-import pl.itkurnik.skirental.domain.role.exception.RoleNotFoundException;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
 
 import java.util.Optional;
@@ -64,15 +61,8 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(encodedPassword);
         user.setIsRegistered(Boolean.TRUE);
-        user.getRoles().add(getClientRole());
+        user.getRoles().add(roleService.getClientRole());
 
         userRepository.save(user);
-    }
-
-    private Role getClientRole() { // TODO KM move this method to RoleService
-        String clientRoleName = Roles.CLIENT.getName();
-
-        return roleService.findByName(clientRoleName)
-                .orElseThrow(() -> new RoleNotFoundException(clientRoleName));
     }
 }

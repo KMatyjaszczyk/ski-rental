@@ -2,6 +2,7 @@ package pl.itkurnik.skirental.domain.role;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.itkurnik.skirental.domain.role.exception.RoleNotFoundException;
 
 import java.util.Optional;
 
@@ -10,11 +11,14 @@ import java.util.Optional;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-    public Optional<Role> findById(Integer id) {
-        return roleRepository.findById(id);
+    public Role getClientRole() {
+        String clientRoleName = Roles.CLIENT.getName();
+
+        return findByName(clientRoleName)
+                .orElseThrow(() -> new RoleNotFoundException(clientRoleName));
     }
 
-    public Optional<Role> findByName(String name) {
+    private Optional<Role> findByName(String name) {
         return roleRepository.findByName(name);
     }
 }
