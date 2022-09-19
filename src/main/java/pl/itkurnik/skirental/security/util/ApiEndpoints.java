@@ -2,7 +2,9 @@ package pl.itkurnik.skirental.security.util;
 
 public class ApiEndpoints {
     public static final String[] PUBLIC = {
-            "/api/auth/*"
+            "/api/auth/*",
+            "/api/user/*", // TODO KM for tests only, it should be only for employee
+            "/api/user" // TODO KM for tests only, it should be only for employee
     };
 
     public static final String[] EMPLOYEE = {
