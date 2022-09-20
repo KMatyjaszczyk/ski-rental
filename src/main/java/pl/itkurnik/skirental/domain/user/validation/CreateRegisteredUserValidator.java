@@ -7,42 +7,32 @@ import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.UserRepository;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
-import pl.itkurnik.skirental.domain.user.exception.UserWithPhoneNumberAlreadyRegistered;
 import pl.itkurnik.skirental.domain.user.exception.EmailAlreadyTakenException;
-import pl.itkurnik.skirental.util.ErrorMessagesBuilder;
+import pl.itkurnik.skirental.domain.user.exception.UserWithPhoneNumberAlreadyRegistered;
+import pl.itkurnik.skirental.util.validation.MultipleFieldsValidator;
+import pl.itkurnik.skirental.util.validation.ValidationException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class CreateRegisteredUserValidator {
+public class CreateRegisteredUserValidator extends MultipleFieldsValidator<CreateRegisteredUserRequest> {
     private final UserRepository userRepository;
 
-    public void validateRequestData(CreateRegisteredUserRequest request) {
-        List<String> errorMessages = new ArrayList<>();
-
+    @Override
+    protected void processFieldsValidation(CreateRegisteredUserRequest request, List<String> errorMessages) {
         NameValidator.validate(request.getName(), errorMessages);
         SurnameValidator.validate(request.getSurname(), errorMessages);
         PhoneNumberValidator.validate(request.getPhoneNumber(), errorMessages);
         EmailValidator.validate(request.getEmail(), errorMessages);
         validatePassword(request.getPassword(), errorMessages);
-
-        verifyValidationResult(errorMessages);
     }
 
     private void validatePassword(String password, List<String> errorMessages) {
         boolean passwordIsTooShort = password.length() < Constants.MINIMAL_PASSWORD_LENGTH;
         if (passwordIsTooShort) {
             errorMessages.add("Password is too short");
-        }
-    }
-
-    private void verifyValidationResult(List<String> errorMessages) {
-        if (!errorMessages.isEmpty()) {
-            String combinedMessage = ErrorMessagesBuilder.ofMessages(errorMessages);
-            throw new CreateUserValidationException(combinedMessage);
         }
     }
 
@@ -63,5 +53,10 @@ public class CreateRegisteredUserValidator {
         if (user.getIsRegistered()) {
             throw new UserWithPhoneNumberAlreadyRegistered(user.getPhoneNumber());
         }
+    }
+
+    @Override
+    protected Class<? extends ValidationException> getValidationExceptionType() {
+        return CreateUserValidationException.class;
     }
 }

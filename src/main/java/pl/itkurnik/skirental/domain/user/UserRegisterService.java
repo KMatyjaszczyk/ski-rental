@@ -22,7 +22,7 @@ public class UserRegisterService {
     }
 
     public void processUserRegistration(CreateRegisteredUserRequest request) {
-        validator.validateRequestData(request);
+        validator.validateFields(request);
         validator.validateIfEmailIsAlreadyTaken(request.getEmail());
         validator.validateIfUserWithPhoneNumberIsAlreadyRegistered(request.getPhoneNumber());
 

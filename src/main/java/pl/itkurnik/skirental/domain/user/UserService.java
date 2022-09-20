@@ -20,7 +20,7 @@ public class UserService {
     private final UpdateUserValidator updateUserValidator;
 
     public void createUnregisteredUser(CreateUnregisteredUserRequest request) {
-        createUnregisteredUserValidator.validateRequestData(request);
+        createUnregisteredUserValidator.validateFields(request);
         createUnregisteredUserValidator.validateIfPhoneNumberIsAlreadyTaken(request.getPhoneNumber());
 
         User user = new User();
@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public void update(UpdateUserRequest request) {
-        updateUserValidator.validateRequestData(request);
+        updateUserValidator.validateFields(request);
 
         User user = userRepository.findById(request.getId())
                 .orElseThrow(() -> new UserNotFoundException(request.getId()));

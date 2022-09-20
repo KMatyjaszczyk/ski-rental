@@ -7,32 +7,22 @@ import pl.itkurnik.skirental.domain.user.UserRepository;
 import pl.itkurnik.skirental.domain.user.dto.CreateUnregisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
 import pl.itkurnik.skirental.domain.user.exception.PhoneNumberAlreadyTakenException;
-import pl.itkurnik.skirental.util.ErrorMessagesBuilder;
+import pl.itkurnik.skirental.util.validation.MultipleFieldsValidator;
+import pl.itkurnik.skirental.util.validation.ValidationException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class CreateUnregisteredUserValidator { // TODO KM make this class abstract
+public class CreateUnregisteredUserValidator extends MultipleFieldsValidator<CreateUnregisteredUserRequest> {
     private final UserRepository userRepository;
 
-    public void validateRequestData(CreateUnregisteredUserRequest request) {
-        List<String> errorMessages = new ArrayList<>();
-
+    @Override
+    protected void processFieldsValidation(CreateUnregisteredUserRequest request, List<String> errorMessages) {
         NameValidator.validate(request.getName(), errorMessages);
         SurnameValidator.validate(request.getSurname(), errorMessages);
         PhoneNumberValidator.validate(request.getPhoneNumber(), errorMessages);
-
-        verifyValidationResult(errorMessages);
-    }
-
-    private void verifyValidationResult(List<String> errorMessages) {
-        if (!errorMessages.isEmpty()) {
-            String combinedMessage = ErrorMessagesBuilder.ofMessages(errorMessages);
-            throw new CreateUserValidationException(combinedMessage);
-        }
     }
 
     public void validateIfPhoneNumberIsAlreadyTaken(String phoneNumber) {
@@ -40,5 +30,10 @@ public class CreateUnregisteredUserValidator { // TODO KM make this class abstra
         if (userByPhoneNumber.isPresent()) {
             throw new PhoneNumberAlreadyTakenException(phoneNumber);
         }
+    }
+
+    @Override
+    protected Class<? extends ValidationException> getValidationExceptionType() {
+        return CreateUserValidationException.class;
     }
 }
