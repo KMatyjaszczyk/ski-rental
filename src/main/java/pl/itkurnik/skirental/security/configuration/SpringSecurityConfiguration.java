@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.security.filter.ExceptionHandlerFilter;
 import pl.itkurnik.skirental.security.filter.JwtRequestFilter;
 import pl.itkurnik.skirental.security.util.ApiEndpoints;
 import pl.itkurnik.skirental.security.util.MyUserDetailsService;
@@ -19,6 +20,7 @@ import pl.itkurnik.skirental.security.util.MyUserDetailsService;
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final MyUserDetailsService userDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final PasswordConfiguration passwordConfiguration;
 
     @Override
@@ -41,6 +43,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter, JwtRequestFilter.class);
     }
 
     @Override

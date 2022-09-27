@@ -8,6 +8,7 @@ public class ApiEndpoints {
     };
 
     public static final String[] EMPLOYEE = {
+            "/api/test",
             "/api/test*"
     };
 
