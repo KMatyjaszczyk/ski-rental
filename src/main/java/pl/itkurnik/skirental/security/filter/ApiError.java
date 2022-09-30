@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.api;
+package pl.itkurnik.skirental.security.filter;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.itkurnik.skirental.api.ApiError;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

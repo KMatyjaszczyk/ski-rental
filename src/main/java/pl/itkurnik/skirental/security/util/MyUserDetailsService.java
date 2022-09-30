@@ -27,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(userByEmail.getEmail(), userByEmail.getPassword(), authorities);
     }
 
-    public Boolean validateToken(String token) {
+    public Boolean validateToken(String token) { // TODO KM this method should be in separated class, sth like UserUtilService
         try {
             String username = jwtUtil.extractUsername(token);
             UserDetails user = loadUserByUsername(username);

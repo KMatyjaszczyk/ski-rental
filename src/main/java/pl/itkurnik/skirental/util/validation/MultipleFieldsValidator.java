@@ -1,6 +1,6 @@
 package pl.itkurnik.skirental.util.validation;
 
-import pl.itkurnik.skirental.util.ErrorMessagesBuilder;
+import pl.itkurnik.skirental.util.error.ErrorMessagesBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

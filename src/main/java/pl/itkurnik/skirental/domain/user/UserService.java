@@ -1,6 +1,8 @@
 package pl.itkurnik.skirental.domain.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.role.RoleService;
 import pl.itkurnik.skirental.domain.user.dto.CreateUnregisteredUserRequest;
@@ -13,6 +15,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final RoleService roleService;
@@ -34,7 +37,11 @@ public class UserService {
     }
 
     public void deleteById(Integer id) {
-        userRepository.deleteById(id); // TODO KM preferred will be setting flag 'deleted'
+        try {
+            userRepository.deleteById(id); // TODO KM preferred will be setting flag 'deleted'
+        } catch (EmptyResultDataAccessException ignored) {
+            log.info("User with ID {} already deleted", id);
+        }
     }
 
     public void update(UpdateUserRequest request) {
@@ -47,7 +54,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void updateProperFields(UpdateUserRequest request, User user) {
+    private void updateProperFields(UpdateUserRequest request, User user) { // TODO KM check if user is registered - if not, email cannot be set
         if (!Objects.isNull(request.getName())) {
             user.setName(request.getName());
         }

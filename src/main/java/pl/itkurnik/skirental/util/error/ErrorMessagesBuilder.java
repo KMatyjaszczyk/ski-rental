@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.util;
+package pl.itkurnik.skirental.util.error;
 
 import java.util.Collection;
 

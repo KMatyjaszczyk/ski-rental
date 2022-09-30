@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.user.UserLoginService;
 import pl.itkurnik.skirental.domain.user.UserRegisterService;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.dto.TokenValidationResponse;
+import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
+import pl.itkurnik.skirental.domain.user.exception.EmailAlreadyTakenException;
 import pl.itkurnik.skirental.domain.user.exception.IncorrectUserNameOrPasswordException;
+import pl.itkurnik.skirental.domain.user.exception.UserWithPhoneNumberAlreadyRegistered;
 import pl.itkurnik.skirental.security.model.AuthenticationRequest;
 import pl.itkurnik.skirental.security.model.AuthenticationResponse;
 import pl.itkurnik.skirental.security.util.MyUserDetailsService;
@@ -32,11 +37,14 @@ public class AuthController {
 
         try {
             String token = userLoginService.loginAndGetJwt(request);
+            log.info("User {} successfully logged in", request.getUsername());
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (IncorrectUserNameOrPasswordException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // TODO KM API Exceptions handling
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
 
@@ -44,13 +52,35 @@ public class AuthController {
     public ResponseEntity<Void> register(@RequestBody CreateRegisteredUserRequest request) {
         log.info("Registering user {} {}", request.getName(), request.getSurname());
 
-        userRegisterService.processUserRegistration(request);
-        return ResponseEntity.ok().build();
+        try {
+            userRegisterService.processUserRegistration(request);
+            log.info("User {} {} successfully registered", request.getName(), request.getSurname());
+            return ResponseEntity.ok().build();
+        } catch (CreateUserValidationException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (EmailAlreadyTakenException | UserWithPhoneNumberAlreadyRegistered e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
     }
 
     @PostMapping("/validate")
     public ResponseEntity<TokenValidationResponse> validateToken(@RequestBody String token) {
         log.info("Validating token {}", token);
-        return ResponseEntity.ok(new TokenValidationResponse(userDetailsService.validateToken(token)));
+
+        try {
+            TokenValidationResponse response = new TokenValidationResponse(userDetailsService.validateToken(token));
+            log.info("Token {} successfully validated", token);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
     }
+
+    // TODO KM change password endpoint should be here
 }
