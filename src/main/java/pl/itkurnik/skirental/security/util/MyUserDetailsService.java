@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MyUserDetailsService implements UserDetailsService {
     private final UserRegisterService userRegisterService;
-    private final JwtUtil jwtUtil;
 
     @Override
     @Transactional
@@ -25,15 +24,5 @@ public class MyUserDetailsService implements UserDetailsService {
         Set<MyGrantedAuthority> authorities = userByEmail.getRoles().stream().map(RoleToAuthorityMapper::map).collect(Collectors.toSet());
 
         return new org.springframework.security.core.userdetails.User(userByEmail.getEmail(), userByEmail.getPassword(), authorities);
-    }
-
-    public Boolean validateToken(String token) { // TODO KM this method should be in separated class, sth like UserUtilService
-        try {
-            String username = jwtUtil.extractUsername(token);
-            UserDetails user = loadUserByUsername(username);
-            return jwtUtil.validateToken(token, user);
-        } catch (Exception e) {
-            return false;
-        }
     }
 }
