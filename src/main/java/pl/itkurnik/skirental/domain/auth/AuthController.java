@@ -36,9 +36,9 @@ public class AuthController {
         log.info("Logging in with username {}", request.getUsername());
 
         try {
-            String token = userLoginService.loginAndGetJwt(request);
+            AuthenticationResponse response = userLoginService.loginAndGetJwt(request);
             log.info("User {} successfully logged in", request.getUsername());
-            return ResponseEntity.ok(new AuthenticationResponse(token));
+            return ResponseEntity.ok(response);
         } catch (IncorrectUserNameOrPasswordException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
