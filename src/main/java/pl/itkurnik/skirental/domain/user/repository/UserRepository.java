@@ -1,6 +1,7 @@
-package pl.itkurnik.skirental.domain.user;
+package pl.itkurnik.skirental.domain.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import pl.itkurnik.skirental.domain.user.User;
 
 import java.util.Optional;
 

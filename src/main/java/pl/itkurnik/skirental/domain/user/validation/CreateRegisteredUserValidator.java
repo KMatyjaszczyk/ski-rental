@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.user.User;
-import pl.itkurnik.skirental.domain.user.UserRepository;
+import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
 import pl.itkurnik.skirental.domain.user.exception.EmailAlreadyTakenException;

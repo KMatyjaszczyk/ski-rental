@@ -1,7 +1,8 @@
-package pl.itkurnik.skirental.domain.user;
+package pl.itkurnik.skirental.domain.user.util;
 
 import pl.itkurnik.skirental.domain.auth.dto.UserInfoDto;
 import pl.itkurnik.skirental.domain.role.Role;
+import pl.itkurnik.skirental.domain.user.User;
 
 import java.util.stream.Collectors;
 

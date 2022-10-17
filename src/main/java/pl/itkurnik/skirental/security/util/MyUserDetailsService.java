@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.user.User;
-import pl.itkurnik.skirental.domain.user.UserRegisterService;
+import pl.itkurnik.skirental.domain.user.service.UserRegisterService;
 
 import javax.transaction.Transactional;
 import java.util.Set;

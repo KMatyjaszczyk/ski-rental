@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "reservation_user_item")
-public class ReservationUserItem {
+public class ReservationUserItem { // TODO KM to be removed
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

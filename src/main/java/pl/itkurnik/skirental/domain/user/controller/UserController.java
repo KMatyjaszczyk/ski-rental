@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.domain.user;
+package pl.itkurnik.skirental.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +13,7 @@ import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException
 import pl.itkurnik.skirental.domain.user.exception.PhoneNumberAlreadyTakenException;
 import pl.itkurnik.skirental.domain.user.exception.UpdateUserValidationException;
 import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
+import pl.itkurnik.skirental.domain.user.service.UserService;
 
 @RestController
 @RequestMapping("/api/user")

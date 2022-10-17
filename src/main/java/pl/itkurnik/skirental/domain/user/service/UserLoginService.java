@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.domain.user;
+package pl.itkurnik.skirental.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.role.Role;
+import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.exception.IncorrectUserNameOrPasswordException;
 import pl.itkurnik.skirental.security.model.AuthenticationRequest;
 import pl.itkurnik.skirental.security.model.AuthenticationResponse;
