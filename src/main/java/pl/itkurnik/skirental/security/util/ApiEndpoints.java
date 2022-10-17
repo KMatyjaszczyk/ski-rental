@@ -4,7 +4,8 @@ public class ApiEndpoints {
     public static final String[] PUBLIC = {
             "/api/auth/*",
             "/api/user/*", // TODO KM for tests only, it should be only for employee
-            "/api/user" // TODO KM for tests only, it should be only for employee
+            "/api/user", // TODO KM for tests only, it should be only for employee
+            "/api/user_role/*" // TODO KM for test only, it should be only for admin
     };
 
     public static final String[] EMPLOYEE = {
