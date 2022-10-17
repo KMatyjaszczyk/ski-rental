@@ -62,6 +62,7 @@ public class UserService {
     }
 
     private void updateProperFields(UpdateUserRequest request, User user) { // TODO KM check if user is registered - if not, email cannot be set
+        // TODO KM there should be standard validation like in create(), because if field was not modified, it will come from form in the same shape like it was before
         if (!Objects.isNull(request.getName())) {
             user.setName(request.getName());
         }

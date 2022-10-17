@@ -11,6 +11,7 @@ public class UserMapper {
     public static UserInfoDto mapToInfoDto(User user) {
         UserInfoDto userInfo = new UserInfoDto();
 
+        userInfo.setId(user.getId());
         userInfo.setName(user.getName());
         userInfo.setSurname(user.getSurname());
         userInfo.setEmail(user.getEmail());

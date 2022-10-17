@@ -8,6 +8,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class UserInfoDto {
+    private Integer id;
     private String name;
     private String surname;
     private String email;
