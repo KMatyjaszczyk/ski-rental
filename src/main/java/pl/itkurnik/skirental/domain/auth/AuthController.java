@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.auth.dto.UserInfoDto;
@@ -22,6 +19,10 @@ import pl.itkurnik.skirental.domain.user.util.UserMapper;
 import pl.itkurnik.skirental.security.model.AuthenticationRequest;
 import pl.itkurnik.skirental.security.model.AuthenticationResponse;
 
+import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
+import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
+
+@CrossOrigin(origins = LOCALHOST_FRONTEND_APP_URL, maxAge = CROSS_ORIGIN_MAX_AGE)
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

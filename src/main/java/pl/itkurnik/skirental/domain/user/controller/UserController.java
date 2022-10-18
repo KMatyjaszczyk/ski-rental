@@ -15,6 +15,10 @@ import pl.itkurnik.skirental.domain.user.exception.UpdateUserValidationException
 import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
 import pl.itkurnik.skirental.domain.user.service.UserService;
 
+import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
+import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
+
+@CrossOrigin(origins = LOCALHOST_FRONTEND_APP_URL, maxAge = CROSS_ORIGIN_MAX_AGE)
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor

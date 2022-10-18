@@ -17,6 +17,10 @@ import pl.itkurnik.skirental.domain.equipment.service.ManufacturerService;
 
 import java.util.List;
 
+import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
+import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
+
+@CrossOrigin(origins = LOCALHOST_FRONTEND_APP_URL, maxAge = CROSS_ORIGIN_MAX_AGE)
 @RestController
 @RequestMapping("/api/manufacturer")
 @RequiredArgsConstructor

@@ -10,6 +10,10 @@ import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
 import pl.itkurnik.skirental.domain.user.service.UserRoleService;
 
+import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
+import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
+
+@CrossOrigin(origins = LOCALHOST_FRONTEND_APP_URL, maxAge = CROSS_ORIGIN_MAX_AGE)
 @RestController
 @RequestMapping("/api/user_role")
 @RequiredArgsConstructor
