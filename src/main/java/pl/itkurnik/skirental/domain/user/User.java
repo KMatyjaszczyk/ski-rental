@@ -47,9 +47,6 @@ public class User {
     @Column(name = "deleted", nullable = false)
     private Boolean deleted = false;
 
-    @OneToMany(mappedBy = "user")
-    private Set<ReservationUserItem> reservationUserItems = new LinkedHashSet<>();
-
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

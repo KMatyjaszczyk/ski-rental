@@ -1,4 +1,3 @@
-drop table if exists "reservation_user_item";
 drop table if exists "payment";
 drop table if exists "report";
 drop table if exists "rent_item";
@@ -271,19 +270,6 @@ alter table "report" add constraint "report_rent_fk" foreign key("rent_id") refe
 alter table "report" add constraint "report_report_type_fk" foreign key("report_type_id") references "report_type"("id")
     on update cascade on delete restrict;
 alter table "report" add constraint "report_report_status_fk" foreign key("report_status_id") references "report_status"("id")
-    on update cascade on delete restrict;
-
-create table if not exists "reservation_user_item" (
-    "id" serial,
-    "user_id" int4 not null,
-    "item_id" int4 not null,
-    "reserved_from" date not null,
-    "reserved_to" date not null
-);
-alter table "reservation_user_item" add constraint "reservation_user_item_pk" primary key ("id");
-alter table "reservation_user_item" add constraint "reservation_user_item_user_fk" foreign key("user_id") references "user"("id")
-    on update cascade on delete restrict;
-alter table "reservation_user_item" add constraint "reservation_user_item_item_fk" foreign key("item_id") references "item"("id")
     on update cascade on delete restrict;
 
 create table if not exists "rental_data" (
