@@ -59,7 +59,7 @@ public class AuthController {
         } catch (CreateUserValidationException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        } catch (EmailAlreadyTakenException | UserWithPhoneNumberAlreadyRegistered e) {
+        } catch (EmailAlreadyTakenException | UserWithPhoneNumberAlreadyRegisteredException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (Exception e) {

@@ -8,7 +8,7 @@ import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
 import pl.itkurnik.skirental.domain.user.exception.EmailAlreadyTakenException;
-import pl.itkurnik.skirental.domain.user.exception.UserWithPhoneNumberAlreadyRegistered;
+import pl.itkurnik.skirental.domain.user.exception.UserWithPhoneNumberAlreadyRegisteredException;
 import pl.itkurnik.skirental.util.validation.MultipleFieldsValidator;
 import pl.itkurnik.skirental.util.validation.ValidationException;
 
@@ -51,7 +51,7 @@ public class CreateRegisteredUserValidator extends MultipleFieldsValidator<Creat
 
     private void validateIfIsRegistered(User user) {
         if (user.getIsRegistered()) {
-            throw new UserWithPhoneNumberAlreadyRegistered(user.getPhoneNumber());
+            throw new UserWithPhoneNumberAlreadyRegisteredException(user.getPhoneNumber());
         }
     }
 
