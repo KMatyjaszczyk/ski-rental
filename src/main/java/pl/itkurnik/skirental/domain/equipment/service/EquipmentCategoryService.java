@@ -6,16 +6,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateEquipmentCategoryRequest;
-import pl.itkurnik.skirental.domain.equipment.dto.EquipmentCategoryInfoDto;
 import pl.itkurnik.skirental.domain.equipment.dto.UpdateEquipmentCategoryRequest;
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentCategoryNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.repository.EquipmentCategoryRepository;
-import pl.itkurnik.skirental.domain.equipment.util.EquipmentCategoryMapper;
 import pl.itkurnik.skirental.domain.equipment.validation.CreateEquipmentCategoryValidator;
 import pl.itkurnik.skirental.domain.equipment.validation.UpdateEquipmentCategoryValidator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,19 +22,13 @@ public class EquipmentCategoryService {
     private final CreateEquipmentCategoryValidator createEquipmentCategoryValidator;
     private final UpdateEquipmentCategoryValidator updateEquipmentCategoryValidator;
 
-    public List<EquipmentCategoryInfoDto> findAll() {
-        List<EquipmentCategory> equipmentCategories = equipmentCategoryRepository.findAll();
-
-        return equipmentCategories.stream()
-                .map(EquipmentCategoryMapper::mapToInfoDto)
-                .collect(Collectors.toList());
+    public List<EquipmentCategory> findAll() {
+        return equipmentCategoryRepository.findAll();
     }
 
-    public EquipmentCategoryInfoDto findById(Integer id) {
-        EquipmentCategory equipmentCategory = equipmentCategoryRepository.findById(id)
+    public EquipmentCategory findById(Integer id) {
+        return equipmentCategoryRepository.findById(id)
                 .orElseThrow(() -> new EquipmentCategoryNotFoundException(id));
-
-        return EquipmentCategoryMapper.mapToInfoDto(equipmentCategory);
     }
 
     public void deleteById(Integer id) {

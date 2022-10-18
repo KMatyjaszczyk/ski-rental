@@ -4,6 +4,7 @@ import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
 import pl.itkurnik.skirental.domain.equipment.dto.EquipmentCategoryInfoDto;
 import pl.itkurnik.skirental.domain.equipment.dto.SizeInfoDto;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,5 +23,11 @@ public class EquipmentCategoryMapper {
         equipmentCategoryInfo.setSizes(sizeInfos);
 
         return equipmentCategoryInfo;
+    }
+
+    public static List<EquipmentCategoryInfoDto> mapAllToInfoDto(List<EquipmentCategory> equipmentCategories) {
+        return equipmentCategories.stream()
+                .map(EquipmentCategoryMapper::mapToInfoDto)
+                .collect(Collectors.toList());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateEquipmentCategoryRequest;
 import pl.itkurnik.skirental.domain.equipment.dto.EquipmentCategoryInfoDto;
 import pl.itkurnik.skirental.domain.equipment.dto.UpdateEquipmentCategoryRequest;
@@ -14,6 +15,7 @@ import pl.itkurnik.skirental.domain.equipment.exception.CreateEquipmentCategoryV
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentCategoryNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.exception.UpdateEquipmentCategoryValidationException;
 import pl.itkurnik.skirental.domain.equipment.service.EquipmentCategoryService;
+import pl.itkurnik.skirental.domain.equipment.util.EquipmentCategoryMapper;
 
 import java.util.List;
 
@@ -32,9 +34,9 @@ public class EquipmentCategoryController {
     public ResponseEntity<List<EquipmentCategoryInfoDto>> findAll() {
         try {
             log.info("Receiving all equipment categories");
-            List<EquipmentCategoryInfoDto> equipmentCategories = equipmentCategoryService.findAll();
+            List<EquipmentCategory> equipmentCategories = equipmentCategoryService.findAll();
             log.info("All equipment categories successfully received");
-            return ResponseEntity.ok(equipmentCategories);
+            return ResponseEntity.ok(EquipmentCategoryMapper.mapAllToInfoDto(equipmentCategories));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
@@ -45,9 +47,9 @@ public class EquipmentCategoryController {
     public ResponseEntity<EquipmentCategoryInfoDto> findById(@PathVariable Integer id) {
         try {
             log.info("Receiving equipment category with id {}", id);
-            EquipmentCategoryInfoDto equipmentCategory = equipmentCategoryService.findById(id);
+            EquipmentCategory equipmentCategory = equipmentCategoryService.findById(id);
             log.info("Equipment category with id {} received successfully", id);
-            return ResponseEntity.ok(equipmentCategory);
+            return ResponseEntity.ok(EquipmentCategoryMapper.mapToInfoDto(equipmentCategory));
         } catch (EquipmentCategoryNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
