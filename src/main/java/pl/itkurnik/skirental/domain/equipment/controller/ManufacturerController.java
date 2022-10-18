@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.domain.equipment.Manufacturer;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateManufacturerRequest;
 import pl.itkurnik.skirental.domain.equipment.dto.ManufacturerInfoDto;
 import pl.itkurnik.skirental.domain.equipment.dto.UpdateManufacturerRequest;
@@ -14,6 +15,7 @@ import pl.itkurnik.skirental.domain.equipment.exception.CreateManufacturerValida
 import pl.itkurnik.skirental.domain.equipment.exception.ManufacturerNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.exception.UpdateManufacturerValidationException;
 import pl.itkurnik.skirental.domain.equipment.service.ManufacturerService;
+import pl.itkurnik.skirental.domain.equipment.util.ManufacturerMapper;
 
 import java.util.List;
 
@@ -32,9 +34,9 @@ public class ManufacturerController {
     public ResponseEntity<List<ManufacturerInfoDto>> findAll() {
         try {
             log.info("Receiving all manufacturers");
-            List<ManufacturerInfoDto> manufacturers = manufacturerService.findAll();
+            List<Manufacturer> manufacturers = manufacturerService.findAll();
             log.info("All manufacturers successfully received");
-            return ResponseEntity.ok(manufacturers);
+            return ResponseEntity.ok(ManufacturerMapper.mapAllToInfoDto(manufacturers));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
@@ -45,9 +47,9 @@ public class ManufacturerController {
     public ResponseEntity<ManufacturerInfoDto> findById(@PathVariable Integer id) {
         try {
             log.info("Receiving manufacturer with id {}", id);
-            ManufacturerInfoDto manufacturer = manufacturerService.findById(id);
+            Manufacturer manufacturer = manufacturerService.findById(id);
             log.info("Manufacturer with id {} received successfully", id);
-            return ResponseEntity.ok(manufacturer);
+            return ResponseEntity.ok(ManufacturerMapper.mapToInfoDto(manufacturer));
         } catch (ManufacturerNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);

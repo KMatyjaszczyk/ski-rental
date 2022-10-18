@@ -6,16 +6,13 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.Manufacturer;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateManufacturerRequest;
-import pl.itkurnik.skirental.domain.equipment.dto.ManufacturerInfoDto;
 import pl.itkurnik.skirental.domain.equipment.dto.UpdateManufacturerRequest;
-import pl.itkurnik.skirental.domain.equipment.repository.ManufacturerRepository;
 import pl.itkurnik.skirental.domain.equipment.exception.ManufacturerNotFoundException;
-import pl.itkurnik.skirental.domain.equipment.util.ManufacturerMapper;
+import pl.itkurnik.skirental.domain.equipment.repository.ManufacturerRepository;
 import pl.itkurnik.skirental.domain.equipment.validation.CreateManufacturerValidator;
 import pl.itkurnik.skirental.domain.equipment.validation.UpdateManufacturerValidator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,19 +22,13 @@ public class ManufacturerService {
     private final CreateManufacturerValidator createManufacturerValidator;
     private final UpdateManufacturerValidator updateManufacturerValidator;
 
-    public List<ManufacturerInfoDto> findAll() {
-        List<Manufacturer> manufacturers = manufacturerRepository.findAll();
-
-        return manufacturers.stream()
-                .map(ManufacturerMapper::mapToInfoDto)
-                .collect(Collectors.toList());
+    public List<Manufacturer> findAll() {
+        return manufacturerRepository.findAll();
     }
 
-    public ManufacturerInfoDto findById(Integer id) {
-        Manufacturer manufacturer = manufacturerRepository.findById(id)
+    public Manufacturer findById(Integer id) {
+        return manufacturerRepository.findById(id)
                 .orElseThrow(() -> new ManufacturerNotFoundException(id));
-
-        return ManufacturerMapper.mapToInfoDto(manufacturer);
     }
 
     public void deleteById(Integer id) {
