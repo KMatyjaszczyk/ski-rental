@@ -2,7 +2,6 @@ package pl.itkurnik.skirental.domain.equipment;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
-import pl.itkurnik.skirental.domain.item.Size;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;

@@ -5,8 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.role.RoleService;
 import pl.itkurnik.skirental.domain.user.User;
-import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.dto.CreateRegisteredUserRequest;
+import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.validation.CreateRegisteredUserValidator;
 
 import java.util.Optional;

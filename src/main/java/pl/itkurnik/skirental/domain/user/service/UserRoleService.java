@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.role.Role;
 import pl.itkurnik.skirental.domain.role.RoleService;
 import pl.itkurnik.skirental.domain.user.User;
-import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
+import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.Collections;

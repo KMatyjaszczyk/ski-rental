@@ -6,10 +6,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.role.RoleService;
 import pl.itkurnik.skirental.domain.user.User;
-import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.dto.CreateUnregisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.dto.UpdateUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
+import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.validation.CreateUnregisteredUserValidator;
 import pl.itkurnik.skirental.domain.user.validation.UpdateUserValidator;
 

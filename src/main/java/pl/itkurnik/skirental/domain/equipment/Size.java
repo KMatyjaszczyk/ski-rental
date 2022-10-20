@@ -1,8 +1,7 @@
-package pl.itkurnik.skirental.domain.item;
+package pl.itkurnik.skirental.domain.equipment;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
-import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
 
 import javax.persistence.*;
 

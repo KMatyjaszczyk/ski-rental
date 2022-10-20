@@ -13,5 +13,5 @@ public class EquipmentCategoryInfoDto {
     private Integer id;
     private String name;
     private String description;
-    private Set<SizeInfoDto> sizes;
+    private Set<SizeFlatInfoDto> sizes;
 }

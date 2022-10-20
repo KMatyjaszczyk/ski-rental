@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SizeInfoDto {
+public class UpdateSizeRequest {
     private Integer id;
     private String size;
-    private EquipmentCategoryFlatInfoDto equipmentCategory;
+    private Integer equipmentCategoryId;
     private String description;
 }
