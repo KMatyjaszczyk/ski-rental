@@ -2,6 +2,7 @@ package pl.itkurnik.skirental.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.role.RoleService;
@@ -12,8 +13,6 @@ import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
 import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.validation.CreateUnregisteredUserValidator;
 import pl.itkurnik.skirental.domain.user.validation.UpdateUserValidator;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -61,21 +60,20 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void updateProperFields(UpdateUserRequest request, User user) { // TODO KM check if user is registered - if not, email cannot be set
-        // TODO KM there should be standard validation like in create(), because if field was not modified, it will come from form in the same shape like it was before
-        if (!Objects.isNull(request.getName())) {
+    private void updateProperFields(UpdateUserRequest request, User user) { // TODO KM check if user is registered - if not, email cannot be set, register logic necessary
+        if (!StringUtils.equals(request.getName(), user.getName())) {
             user.setName(request.getName());
         }
 
-        if (!Objects.isNull(request.getSurname())) {
+        if (!StringUtils.equals(request.getSurname(), user.getSurname())) {
             user.setSurname(request.getSurname());
         }
 
-        if (!Objects.isNull(request.getPhoneNumber())) {
+        if (!StringUtils.equals(request.getPhoneNumber(), user.getPhoneNumber())) {
             user.setPhoneNumber(request.getPhoneNumber());
         }
 
-        if (!Objects.isNull(request.getEmail())) {
+        if (!StringUtils.equals(request.getEmail(), user.getEmail())) {
             user.setEmail(request.getEmail());
         }
     }

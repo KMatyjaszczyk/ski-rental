@@ -2,6 +2,7 @@ package pl.itkurnik.skirental.domain.equipment.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.Equipment;
@@ -76,7 +77,7 @@ public class EquipmentService {
     }
 
     private void updateProperFields(UpdateEquipmentRequest request, Equipment equipment) {
-        if (!request.getModel().equals(equipment.getModel())) {
+        if (!StringUtils.equals(request.getModel(), equipment.getModel())) {
             equipment.setModel(request.getModel());
         }
 
@@ -90,7 +91,7 @@ public class EquipmentService {
             equipment.setEquipmentCategory(category);
         }
 
-        if (!request.getDescription().equals(equipment.getDescription())) {
+        if (!StringUtils.equals(request.getDescription(), equipment.getDescription())) {
             equipment.setDescription(request.getDescription());
         }
     }

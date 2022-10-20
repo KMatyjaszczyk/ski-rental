@@ -2,6 +2,7 @@ package pl.itkurnik.skirental.domain.equipment.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
@@ -68,7 +69,7 @@ public class SizeService {
     }
 
     private void updateProperFields(Size size, UpdateSizeRequest request) {
-        if (!request.getSize().equals(size.getSize())) {
+        if (!StringUtils.equals(request.getSize(), size.getSize())) {
             size.setSize(request.getSize());
         }
 
@@ -77,7 +78,7 @@ public class SizeService {
             size.setEquipmentCategory(category);
         }
 
-        if (!request.getDescription().equals(size.getDescription())) { // TODO fix NullPointerException
+        if (!StringUtils.equals(request.getDescription(), size.getDescription())) {
             size.setDescription(request.getDescription());
         }
     }
