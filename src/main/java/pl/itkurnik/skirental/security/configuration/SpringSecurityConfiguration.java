@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.security.filter.ExceptionHandlerFilter;
 import pl.itkurnik.skirental.security.filter.JwtRequestFilter;
-import pl.itkurnik.skirental.security.util.ApiEndpoints;
 import pl.itkurnik.skirental.security.util.MyUserDetailsService;
 
 @Configuration
