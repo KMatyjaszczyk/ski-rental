@@ -6,13 +6,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
+import pl.itkurnik.skirental.domain.equipment.Size;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateEquipmentCategoryRequest;
+import pl.itkurnik.skirental.domain.equipment.dto.SizeForEquipmentCategoryRequest;
 import pl.itkurnik.skirental.domain.equipment.dto.UpdateEquipmentCategoryRequest;
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentCategoryNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.repository.EquipmentCategoryRepository;
+import pl.itkurnik.skirental.domain.equipment.repository.SizeRepository;
 import pl.itkurnik.skirental.domain.equipment.validation.CreateEquipmentCategoryValidator;
 import pl.itkurnik.skirental.domain.equipment.validation.UpdateEquipmentCategoryValidator;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -20,6 +24,7 @@ import java.util.List;
 @Slf4j
 public class EquipmentCategoryService {
     private final EquipmentCategoryRepository equipmentCategoryRepository;
+    private final SizeRepository sizeRepository;
     private final CreateEquipmentCategoryValidator createEquipmentCategoryValidator;
     private final UpdateEquipmentCategoryValidator updateEquipmentCategoryValidator;
 
@@ -40,16 +45,31 @@ public class EquipmentCategoryService {
         }
     }
 
+    @Transactional
     public void create(CreateEquipmentCategoryRequest request) {
         createEquipmentCategoryValidator.validate(request);
-        createEquipmentCategory(request);
+
+        EquipmentCategory equipmentCategory = createEquipmentCategory(request);
+        createSizesForCategory(request.getSizes(), equipmentCategory); // TODO KM it may be extracted to another service eg. SizeForEquipmentCategoryService
     }
 
-    private void createEquipmentCategory(CreateEquipmentCategoryRequest request) {
+    private EquipmentCategory createEquipmentCategory(CreateEquipmentCategoryRequest request) {
         EquipmentCategory equipmentCategory = new EquipmentCategory();
         equipmentCategory.setName(request.getName());
         equipmentCategory.setDescription(request.getDescription());
-        equipmentCategoryRepository.save(equipmentCategory);
+
+        return equipmentCategoryRepository.save(equipmentCategory);
+    }
+
+    private void createSizesForCategory(List<SizeForEquipmentCategoryRequest> sizesFromRequest, EquipmentCategory equipmentCategory) {
+        for (SizeForEquipmentCategoryRequest sizeFromRequest : sizesFromRequest) {
+            Size size = new Size();
+            size.setSize(sizeFromRequest.getSize());
+            size.setEquipmentCategory(equipmentCategory);
+            size.setDescription(sizeFromRequest.getDescription());
+
+            sizeRepository.save(size);
+        }
     }
 
     public void update(UpdateEquipmentCategoryRequest request) {
