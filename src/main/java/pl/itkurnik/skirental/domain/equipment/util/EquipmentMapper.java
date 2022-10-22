@@ -1,6 +1,7 @@
 package pl.itkurnik.skirental.domain.equipment.util;
 
 import pl.itkurnik.skirental.domain.equipment.Equipment;
+import pl.itkurnik.skirental.domain.equipment.dto.EquipmentFlatInfoDto;
 import pl.itkurnik.skirental.domain.equipment.dto.EquipmentInfoDto;
 
 import java.util.List;
@@ -25,6 +26,24 @@ public class EquipmentMapper {
     public static List<EquipmentInfoDto> mapAllToInfoDto(List<Equipment> equipments) {
         return equipments.stream()
                 .map(EquipmentMapper::mapToInfoDto)
+                .collect(Collectors.toList());
+    }
+
+    public static EquipmentFlatInfoDto mapToFlatInfoDto(Equipment equipment) {
+        EquipmentFlatInfoDto equipmentInfo = new EquipmentFlatInfoDto();
+
+        equipmentInfo.setId(equipment.getId());
+        equipmentInfo.setModel(equipment.getModel());
+        equipmentInfo.setManufacturer(ManufacturerMapper.mapToInfoDto(equipment.getManufacturer()));
+        equipmentInfo.setEquipmentCategory(EquipmentCategoryMapper.mapToFlatInfoDto(equipment.getEquipmentCategory()));
+        equipmentInfo.setDescription(equipment.getDescription());
+
+        return equipmentInfo;
+    }
+
+    public static List<EquipmentFlatInfoDto> mapAllToFlatInfoDto(List<Equipment> equipments) {
+        return equipments.stream()
+                .map(EquipmentMapper::mapToFlatInfoDto)
                 .collect(Collectors.toList());
     }
 }

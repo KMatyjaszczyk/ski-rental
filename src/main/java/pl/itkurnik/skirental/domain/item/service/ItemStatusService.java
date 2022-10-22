@@ -14,6 +14,11 @@ import java.util.List;
 public class ItemStatusService {
     private final ItemStatusRepository itemStatusRepository;
 
+    public ItemStatus findById(Integer id) {
+        return itemStatusRepository.findById(id)
+                .orElseThrow(() -> new ItemStatusNotFoundException(id));
+    }
+
     public List<ItemStatus> findAll() {
         return itemStatusRepository.findAll();
     }

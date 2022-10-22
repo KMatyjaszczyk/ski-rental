@@ -15,7 +15,9 @@ class ApiEndpoints {
             "/api/size", // TODO KM for test only
             "/api/size/**", // TODO KM for test only
             "/api/item_status", // TODO KM for test only
-            "/api/item_status/**" // TODO KM for test only
+            "/api/item_status/**", // TODO KM for test only
+            "/api/item", // TODO KM for test only
+            "/api/item/**" // TODO KM for test only
     };
 
     public static final String[] EMPLOYEE = {
