@@ -44,6 +44,19 @@ public class EquipmentController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<EquipmentInfoDto>> findAll() {
+        try {
+            log.info("Receiving all equipment");
+            List<Equipment> equipments = equipmentService.findAll();
+            log.info("All equipment received successfully");
+            return ResponseEntity.ok(EquipmentMapper.mapAllToInfoDto(equipments));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
     @GetMapping("/manufacturer/{manufacturerId}")
     public ResponseEntity<List<EquipmentInfoDto>> findAllByManufacturerId(@PathVariable Integer manufacturerId) {
         try {

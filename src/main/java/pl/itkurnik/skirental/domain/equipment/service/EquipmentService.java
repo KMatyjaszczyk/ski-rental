@@ -32,6 +32,10 @@ public class EquipmentService {
                 .orElseThrow(() -> new EquipmentNotFoundException(id));
     }
 
+    public List<Equipment> findAll() {
+        return equipmentRepository.findAll();
+    }
+
     public List<Equipment> findAllByManufacturerId(Integer manufacturerId) {
         return equipmentRepository.findAllByManufacturer_Id(manufacturerId);
     }
