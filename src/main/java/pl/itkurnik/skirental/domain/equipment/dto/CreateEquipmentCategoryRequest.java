@@ -12,5 +12,5 @@ import java.util.List;
 public class CreateEquipmentCategoryRequest {
     private String name;
     private String description;
-    private List<SizeForEquipmentCategoryRequest> sizes;
+    private List<SizeForCreateEquipmentCategoryRequest> sizes;
 }

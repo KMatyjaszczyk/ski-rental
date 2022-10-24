@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SizeForEquipmentCategoryRequest {
+public class SizeForCreateEquipmentCategoryRequest {
     private String size;
     private String description;
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.EquipmentCategory;
 import pl.itkurnik.skirental.domain.equipment.Size;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateEquipmentCategoryRequest;
-import pl.itkurnik.skirental.domain.equipment.dto.SizeForEquipmentCategoryRequest;
+import pl.itkurnik.skirental.domain.equipment.dto.SizeForCreateEquipmentCategoryRequest;
 import pl.itkurnik.skirental.domain.equipment.dto.UpdateEquipmentCategoryRequest;
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentCategoryNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.repository.EquipmentCategoryRepository;
@@ -61,8 +61,8 @@ public class EquipmentCategoryService {
         return equipmentCategoryRepository.save(equipmentCategory);
     }
 
-    private void createSizesForCategory(List<SizeForEquipmentCategoryRequest> sizesFromRequest, EquipmentCategory equipmentCategory) {
-        for (SizeForEquipmentCategoryRequest sizeFromRequest : sizesFromRequest) {
+    private void createSizesForCategory(List<SizeForCreateEquipmentCategoryRequest> sizesFromRequest, EquipmentCategory equipmentCategory) {
+        for (SizeForCreateEquipmentCategoryRequest sizeFromRequest : sizesFromRequest) {
             Size size = new Size();
             size.setSize(sizeFromRequest.getSize());
             size.setEquipmentCategory(equipmentCategory);
