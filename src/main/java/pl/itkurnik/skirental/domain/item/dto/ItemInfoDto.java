@@ -17,6 +17,7 @@ public class ItemInfoDto {
     private EquipmentFlatInfoDto equipment;
     private SizeFlatInfoDto size;
     private ItemStatusInfoDto itemStatus;
+    private PriceInfoDto actualPrice;
     private LocalDate lastServiceDate;
     private BigDecimal purchasePrice;
     private String description;

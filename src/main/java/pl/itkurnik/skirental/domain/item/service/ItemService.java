@@ -11,13 +11,18 @@ import pl.itkurnik.skirental.domain.equipment.service.EquipmentService;
 import pl.itkurnik.skirental.domain.equipment.service.SizeService;
 import pl.itkurnik.skirental.domain.item.Item;
 import pl.itkurnik.skirental.domain.item.ItemStatus;
+import pl.itkurnik.skirental.domain.item.Price;
 import pl.itkurnik.skirental.domain.item.dto.CreateItemRequest;
+import pl.itkurnik.skirental.domain.item.dto.PriceForCreateItemRequest;
 import pl.itkurnik.skirental.domain.item.dto.UpdateItemRequest;
 import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
 import pl.itkurnik.skirental.domain.item.repository.ItemRepository;
+import pl.itkurnik.skirental.domain.item.repository.PriceRepository;
 import pl.itkurnik.skirental.domain.item.validation.CreateItemValidator;
 import pl.itkurnik.skirental.domain.item.validation.UpdateItemValidator;
 
+import javax.transaction.Transactional;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -25,6 +30,7 @@ import java.util.List;
 @Slf4j
 public class ItemService {
     private final ItemRepository itemRepository;
+    private final PriceRepository priceRepository;
     private final EquipmentService equipmentService;
     private final SizeService sizeService;
     private final ItemStatusService itemStatusService;
@@ -52,12 +58,14 @@ public class ItemService {
         }
     }
 
+    @Transactional
     public void create(CreateItemRequest request) {
         createItemValidator.validateFields(request);
-        createItem(request);
+        Item item = createItem(request);
+        createDefaultPriceForItem(request.getDefaultPrice(), item);
     }
 
-    private void createItem(CreateItemRequest request) {
+    private Item createItem(CreateItemRequest request) {
         Equipment equipment = equipmentService.findById(request.getEquipmentId());
         Size size = sizeService.findById(request.getSizeId());
         ItemStatus status = itemStatusService.getOpenStatus();
@@ -69,7 +77,18 @@ public class ItemService {
         item.setPurchasePrice(request.getPurchasePrice());
         item.setDescription(request.getDescription());
 
-        itemRepository.save(item);
+        return itemRepository.save(item);
+    }
+
+    private void createDefaultPriceForItem(PriceForCreateItemRequest priceFromRequest, Item item) {
+        Price price = new Price();
+        price.setItem(item);
+        price.setPriceValue(priceFromRequest.getPriceValue());
+        price.setValidFrom(Instant.now());
+        price.setValidTo(null);
+        price.setDescription(priceFromRequest.getDescription());
+
+        priceRepository.save(price);
     }
 
     public void update(UpdateItemRequest request) {

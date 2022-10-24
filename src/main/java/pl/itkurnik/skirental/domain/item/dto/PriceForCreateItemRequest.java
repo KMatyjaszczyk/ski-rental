@@ -9,10 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CreateItemRequest {
-    private Integer equipmentId;
-    private Integer sizeId;
-    private BigDecimal purchasePrice;
+public class PriceForCreateItemRequest {
+    private BigDecimal priceValue;
     private String description;
-    private PriceForCreateItemRequest defaultPrice;
 }

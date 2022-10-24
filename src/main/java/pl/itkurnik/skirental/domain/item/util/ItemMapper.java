@@ -17,6 +17,7 @@ public class ItemMapper {
         itemInfo.setEquipment(EquipmentMapper.mapToFlatInfoDto(item.getEquipment()));
         itemInfo.setSize(SizeMapper.mapToFlatInfoDto(item.getSize()));
         itemInfo.setItemStatus(ItemStatusMapper.mapToInfoDto(item.getItemStatus()));
+        itemInfo.setActualPrice(PriceMapper.mapToInfoDto(PriceUtils.findActualPrice(item.getPrices(), item.getId())));
         itemInfo.setLastServiceDate(item.getLastServiceDate());
         itemInfo.setPurchasePrice(item.getPurchasePrice());
         itemInfo.setDescription(item.getDescription());

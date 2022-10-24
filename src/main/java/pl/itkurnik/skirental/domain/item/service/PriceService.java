@@ -5,15 +5,14 @@ import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.Item;
 import pl.itkurnik.skirental.domain.item.Price;
 import pl.itkurnik.skirental.domain.item.dto.CreatePriceRequest;
-import pl.itkurnik.skirental.domain.item.exception.ActualPriceForItemNotFoundException;
 import pl.itkurnik.skirental.domain.item.exception.PriceNotFoundException;
 import pl.itkurnik.skirental.domain.item.repository.PriceRepository;
+import pl.itkurnik.skirental.domain.item.util.PriceUtils;
 import pl.itkurnik.skirental.domain.item.validation.CreatePriceValidator;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +31,7 @@ public class PriceService {
         verifyIfItemExists(itemId);
 
         List<Price> prices = priceRepository.findAllByItem_Id(itemId);
-        return prices.stream()
-                .filter(price -> Objects.isNull(price.getValidTo()))
-                .findFirst()
-                .orElseThrow(() -> new ActualPriceForItemNotFoundException(itemId));
+        return PriceUtils.findActualPrice(prices, itemId);
     }
 
     private void verifyIfItemExists(Integer itemId) {
