@@ -61,6 +61,8 @@ public class ItemService {
     @Transactional
     public void create(CreateItemRequest request) {
         createItemValidator.validateFields(request);
+        createItemValidator.validateIfSizeIsInProperEquipmentCategory(request);
+
         Item item = createItem(request);
         createDefaultPriceForItem(request.getDefaultPrice(), item);
     }
