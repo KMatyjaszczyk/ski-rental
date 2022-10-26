@@ -58,8 +58,10 @@ public class EquipmentService {
     }
 
     private void createEquipment(CreateEquipmentRequest request) {
-        Manufacturer manufacturer = manufacturerService.findById(request.getManufacturerId());
-        EquipmentCategory category = equipmentCategoryService.findById(request.getEquipmentCategoryId());
+        Manufacturer manufacturer = manufacturerService.findById(
+                request.getManufacturerId());
+        EquipmentCategory category = equipmentCategoryService.findById(
+                request.getEquipmentCategoryId());
 
         Equipment equipment = new Equipment();
         equipment.setModel(request.getModel());

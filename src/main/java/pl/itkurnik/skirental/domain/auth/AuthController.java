@@ -33,10 +33,11 @@ public class AuthController {
     private final UserUtilService userUtilService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
-        log.info("Logging in with username {}", request.getUsername());
-
+    public ResponseEntity<AuthenticationResponse> login(
+            @RequestBody AuthenticationRequest request
+    ) {
         try {
+            log.info("Logging in with username {}", request.getUsername());
             AuthenticationResponse response = userLoginService.loginAndGetJwt(request);
             log.info("User {} successfully logged in", request.getUsername());
             return ResponseEntity.ok(response);
@@ -45,15 +46,15 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody CreateRegisteredUserRequest request) {
-        log.info("Registering user {} {}", request.getName(), request.getSurname());
-
         try {
+            log.info("Registering user {} {}", request.getName(), request.getSurname());
             userRegisterService.processUserRegistration(request);
             log.info("User {} {} successfully registered", request.getName(), request.getSurname());
             return ResponseEntity.ok().build();
@@ -65,7 +66,8 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                    Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
 

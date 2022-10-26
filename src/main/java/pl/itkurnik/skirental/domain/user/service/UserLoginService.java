@@ -28,7 +28,8 @@ public class UserLoginService {
     public AuthenticationResponse loginAndGetJwt(AuthenticationRequest request) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(), request.getPassword()));
         } catch (BadCredentialsException e) {
             throw new IncorrectUserNameOrPasswordException();
         }
@@ -37,7 +38,8 @@ public class UserLoginService {
         String token = jwtUtil.generateToken(userDetails);
 
         User userByEmail = userService.findByEmail(userDetails.getUsername());
-        Set<String> roleNames = userByEmail.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+        Set<String> roleNames = userByEmail.getRoles().stream()
+                .map(Role::getName).collect(Collectors.toSet());
 
         return new AuthenticationResponse(token, roleNames);
     }

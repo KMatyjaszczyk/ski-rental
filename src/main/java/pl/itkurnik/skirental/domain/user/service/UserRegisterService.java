@@ -32,7 +32,8 @@ public class UserRegisterService {
     }
 
     private void registerUser(CreateRegisteredUserRequest request) {
-        Optional<User> userByPhoneNumber = userRepository.findByPhoneNumber(request.getPhoneNumber());
+        Optional<User> userByPhoneNumber = userRepository.findByPhoneNumber(
+                request.getPhoneNumber());
         if (userByPhoneNumber.isPresent()) {
             makeUserRegistered(userByPhoneNumber.get(), request);
             return;

@@ -13,10 +13,15 @@ import java.util.List;
 @Component
 public class CreateEquipmentValidator extends MultipleFieldsValidator<CreateEquipmentRequest> {
     @Override
-    protected void processFieldsValidation(CreateEquipmentRequest request, List<String> errorMessages) {
-        EmptyStringValidator.validate(request.getModel(), "Model", errorMessages);
-        NullObjectValidator.validate(request.getManufacturerId(), "Manufacturer id", errorMessages);
-        NullObjectValidator.validate(request.getEquipmentCategoryId(), "Equipment category id", errorMessages);
+    protected void processFieldsValidation(
+            CreateEquipmentRequest request, List<String> errorMessages
+    ) {
+        EmptyStringValidator.validate(request.getModel(),
+                "Model", errorMessages);
+        NullObjectValidator.validate(request.getManufacturerId(),
+                "Manufacturer id", errorMessages);
+        NullObjectValidator.validate(request.getEquipmentCategoryId(),
+                "Equipment category id", errorMessages);
     }
 
     @Override

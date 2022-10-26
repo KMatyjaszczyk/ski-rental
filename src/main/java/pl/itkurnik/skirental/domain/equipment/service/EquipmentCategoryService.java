@@ -50,7 +50,7 @@ public class EquipmentCategoryService {
         createEquipmentCategoryValidator.validate(request);
 
         EquipmentCategory equipmentCategory = createEquipmentCategory(request);
-        createSizesForCategory(request.getSizes(), equipmentCategory); // TODO KM it may be extracted to another service eg. SizeForEquipmentCategoryService
+        createSizesForCategory(request.getSizes(), equipmentCategory);
     }
 
     private EquipmentCategory createEquipmentCategory(CreateEquipmentCategoryRequest request) {
@@ -61,7 +61,10 @@ public class EquipmentCategoryService {
         return equipmentCategoryRepository.save(equipmentCategory);
     }
 
-    private void createSizesForCategory(List<SizeForCreateEquipmentCategoryRequest> sizesFromRequest, EquipmentCategory equipmentCategory) {
+    private void createSizesForCategory(
+            List<SizeForCreateEquipmentCategoryRequest> sizesFromRequest,
+            EquipmentCategory equipmentCategory
+    ) {
         for (SizeForCreateEquipmentCategoryRequest sizeFromRequest : sizesFromRequest) {
             Size size = new Size();
             size.setSize(sizeFromRequest.getSize());
