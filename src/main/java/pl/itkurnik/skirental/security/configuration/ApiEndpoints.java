@@ -9,7 +9,7 @@ class ApiEndpoints {
             "/api/manufacturer", // TODO KM for test only
             "/api/manufacturer/*", // TODO KM for test only
             "/api/equipment_category", // TODO KM for test only
-            "/api/equipment_category/*", // TODO KM for test only
+            "/api/equipment_category/**", // TODO KM for test only
             "/api/equipment", // TODO KM for test only
             "/api/equipment/**", // TODO KM for test only
             "/api/size", // TODO KM for test only

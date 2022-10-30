@@ -39,10 +39,22 @@ public class EquipmentCategoryService {
 
     public void deleteById(Integer id) {
         try {
-            equipmentCategoryRepository.deleteById(id); // TODO KM preferred will be setting flag 'deleted'
+            equipmentCategoryRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ignored) {
             log.info("Equipment category with ID {} already deleted", id);
         }
+    }
+
+    @Transactional
+    public void deleteWithSizesById(Integer id) {
+        boolean equipmentCategoryDoesNotExist = !equipmentCategoryRepository.existsById(id);
+        if (equipmentCategoryDoesNotExist) {
+            log.info("Equipment category with ID {} already deleted", id);
+            return;
+        }
+
+        sizeRepository.deleteAllByEquipmentCategory_Id(id);
+        deleteById(id);
     }
 
     @Transactional

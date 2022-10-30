@@ -106,4 +106,17 @@ public class EquipmentCategoryController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
+
+    @DeleteMapping("/{id}/sizes")
+    public ResponseEntity<Void> deleteWithSizesById(@PathVariable Integer id) {
+        try {
+            log.info("Deleting equipment category with ID {} with its sizes", id);
+            equipmentCategoryService.deleteWithSizesById(id);
+            log.info("Equipment category with ID {} with its sizes successfully deleted", id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 }
