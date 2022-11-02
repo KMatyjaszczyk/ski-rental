@@ -3,23 +3,26 @@ package pl.itkurnik.skirental.security.configuration;
 class ApiEndpoints {
     public static final String[] PUBLIC = {
             "/api/auth/*",
-            "/api/user/*", // TODO KM for tests only
-            "/api/user", // TODO KM for tests only
-            "/api/user_role/*", // TODO KM for test only
-            "/api/manufacturer", // TODO KM for test only
-            "/api/manufacturer/*", // TODO KM for test only
-            "/api/equipment_category", // TODO KM for test only
-            "/api/equipment_category/**", // TODO KM for test only
-            "/api/equipment", // TODO KM for test only
-            "/api/equipment/**", // TODO KM for test only
-            "/api/size", // TODO KM for test only
-            "/api/size/**", // TODO KM for test only
-            "/api/item_status", // TODO KM for test only
-            "/api/item_status/**", // TODO KM for test only
-            "/api/item", // TODO KM for test only
-            "/api/item/**", // TODO KM for test only
-            "/api/price", // TODO KM for test only
-            "/api/price/**", // TODO KM for test only
+            // TODO KM all below
+            "/api/user/*",
+            "/api/user",
+            "/api/user_role/*",
+            "/api/manufacturer",
+            "/api/manufacturer/*",
+            "/api/equipment_category",
+            "/api/equipment_category/**",
+            "/api/equipment",
+            "/api/equipment/**",
+            "/api/size",
+            "/api/size/**",
+            "/api/item_status",
+            "/api/item_status/**",
+            "/api/item",
+            "/api/item/**",
+            "/api/price",
+            "/api/price/**",
+            "/api/client_document_type",
+            "/api/client_document_type/**",
     };
 
     public static final String[] EMPLOYEE = {
