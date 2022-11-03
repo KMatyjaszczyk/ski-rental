@@ -76,6 +76,7 @@ public class ItemService {
         item.setEquipment(equipment);
         item.setSize(size);
         item.setItemStatus(status);
+        item.setLastServiceDate(request.getLastServiceDate());
         item.setPurchasePrice(request.getPurchasePrice());
         item.setDescription(request.getDescription());
 

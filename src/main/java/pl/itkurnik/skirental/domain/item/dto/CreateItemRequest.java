@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 public class CreateItemRequest {
     private Integer equipmentId;
     private Integer sizeId;
+    private LocalDate lastServiceDate;
     private BigDecimal purchasePrice;
     private String description;
     private PriceForCreateItemRequest defaultPrice;

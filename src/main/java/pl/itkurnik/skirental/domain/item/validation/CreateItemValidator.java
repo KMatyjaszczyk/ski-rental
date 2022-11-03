@@ -14,6 +14,7 @@ import pl.itkurnik.skirental.util.validation.NegativeBigDecimalValidator;
 import pl.itkurnik.skirental.util.validation.NullObjectValidator;
 import pl.itkurnik.skirental.util.validation.ValidationException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,8 +28,21 @@ public class CreateItemValidator extends MultipleFieldsValidator<CreateItemReque
     protected void processFieldsValidation(CreateItemRequest request, List<String> errorMessages) {
         NullObjectValidator.validate(request.getEquipmentId(), "Equipment id", errorMessages);
         NullObjectValidator.validate(request.getSizeId(), "Size id", errorMessages);
+        validateLastServiceDateIfNecessary(request.getLastServiceDate(), errorMessages);
         NegativeBigDecimalValidator.validate(request.getPurchasePrice(), "Purchase price", errorMessages);
         validateDefaultPrice(request, errorMessages);
+    }
+
+    private void validateLastServiceDateIfNecessary(LocalDate lastServiceDate, List<String> errorMessages) {
+        if (!Objects.isNull(lastServiceDate)) {
+            validateIfLastServiceDateIsFromTheFuture(lastServiceDate, errorMessages);
+        }
+    }
+
+    private void validateIfLastServiceDateIsFromTheFuture(LocalDate lastServiceDate, List<String> errorMessages) {
+        if (lastServiceDate.isAfter(LocalDate.now())) {
+            errorMessages.add("Last service date is from the future");
+        }
     }
 
     private void validateDefaultPrice(CreateItemRequest request, List<String> errorMessages) {
