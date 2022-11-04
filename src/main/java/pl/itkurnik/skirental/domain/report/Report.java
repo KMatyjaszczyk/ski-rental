@@ -38,7 +38,4 @@ public class Report {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "report_status_id", nullable = false)
     private ReportStatus reportStatus;
-
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
 }

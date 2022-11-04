@@ -36,9 +36,6 @@ public class Equipment {
     @Type(type = "org.hibernate.type.TextType")
     private String description;
 
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
-
     @OneToMany(mappedBy = "equipment")
     private Set<Item> items = new LinkedHashSet<>();
 }

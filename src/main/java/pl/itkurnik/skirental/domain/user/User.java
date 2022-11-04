@@ -44,9 +44,6 @@ public class User {
     @Type(type = "org.hibernate.type.TextType")
     private String description;
 
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
-
     @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

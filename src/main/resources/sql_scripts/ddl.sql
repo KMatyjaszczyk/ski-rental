@@ -30,8 +30,7 @@ drop table if exists "rental_data";
 create table if not exists "role" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "role" add constraint "role_pk" primary key ("id");
 alter table "role" add constraint "role_name_uq" unique ("name");
@@ -44,8 +43,7 @@ create table if not exists "user" (
     "email" varchar(255),
     "password" varchar(255),
     "is_registered" bool not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "user" add constraint "user_pk" primary key ("id");
 alter table "user" add constraint "user_phone_number_uq" unique ("phone_number");
@@ -53,7 +51,7 @@ alter table "user" add constraint "user_phone_number_uq" unique ("phone_number")
 create table if not exists "user_role" (
     "user_id" int4 not null,
     "role_id" int4 not null
-);
+    );
 alter table "user_role" add constraint "user_role_pk" primary key ("user_id", "role_id");
 alter table "user_role" add constraint "user_role_user_fk" foreign key("user_id") references "user"("id")
     on update cascade on delete restrict;
@@ -63,8 +61,7 @@ alter table "user_role" add constraint "user_role_role_fk" foreign key("role_id"
 create table if not exists "manufacturer" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "manufacturer" add constraint "manufacturer_pk" primary key ("id");
 alter table "manufacturer" add constraint "manufacturer_name_uq" unique ("name");
@@ -72,8 +69,7 @@ alter table "manufacturer" add constraint "manufacturer_name_uq" unique ("name")
 create table if not exists "equipment_category" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "equipment_category" add constraint "equipment_category_pk" primary key ("id");
 alter table "equipment_category" add constraint "equipment_category_name_uq" unique ("name");
@@ -83,8 +79,7 @@ create table if not exists "equipment" (
     "model" varchar(50) not null,
     "manufacturer_id" int4 not null,
     "equipment_category_id" int4 not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "equipment" add constraint "equipment_pk" primary key ("id");
 alter table "equipment" add constraint "equipment_manufacturer_fk" foreign key("manufacturer_id") references "manufacturer"("id")
@@ -96,8 +91,7 @@ create table if not exists "size" (
     "id" serial,
     "size" varchar(15) not null,
     "equipment_category_id" int4 not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "size" add constraint "size_pk" primary key ("id");
 alter table "size" add constraint "size_equipment_category_fk" foreign key("equipment_category_id") references "equipment_category"("id")
@@ -106,8 +100,7 @@ alter table "size" add constraint "size_equipment_category_fk" foreign key("equi
 create table if not exists "item_status" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "item_status" add constraint "item_status_pk" primary key ("id");
 alter table "item_status" add constraint "item_status_name_uq" unique ("name");
@@ -119,8 +112,7 @@ create table if not exists "item" (
     "item_status_id" int4 not null,
     "last_service_date" date,
     "purchase_price" numeric(8, 2) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "item" add constraint "item_pk" primary key ("id");
 alter table "item" add constraint "item_equipment_fk" foreign key("equipment_id") references "equipment"("id")
@@ -136,8 +128,7 @@ create table if not exists "price" (
     "price_value" numeric(8, 2) not null,
     "valid_from" timestamp not null,
     "valid_to" timestamp,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "price" add constraint "price_pk" primary key ("id");
 alter table "price" add constraint "price_item_fk" foreign key("item_id") references "item"("id")
@@ -146,8 +137,7 @@ alter table "price" add constraint "price_item_fk" foreign key("item_id") refere
 create table if not exists "client_document_type" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "client_document_type" add constraint "client_document_type_pk" primary key ("id");
 alter table "client_document_type" add constraint "client_document_type_name_uq" unique ("name");
@@ -155,8 +145,7 @@ alter table "client_document_type" add constraint "client_document_type_name_uq"
 create table if not exists "rent_status" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "rent_status" add constraint "rent_status_pk" primary key ("id");
 alter table "rent_status" add constraint "rent_status_name_uq" unique ("name");
@@ -164,8 +153,7 @@ alter table "rent_status" add constraint "rent_status_name_uq" unique ("name");
 create table if not exists "payment_method" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "payment_method" add constraint "payment_method_pk" primary key ("id");
 alter table "payment_method" add constraint "payment_method_name_uq" unique ("name");
@@ -180,8 +168,7 @@ create table if not exists "rent" (
     "client_document_type_id" int4 not null,
     "client_document_number" varchar(20) not null,
     "employee_id" int4,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "rent" add constraint "rent_pk" primary key ("id");
 alter table "rent" add constraint "rent_client_fk" foreign key("client_id") references "user"("id")
@@ -199,8 +186,7 @@ create table if not exists "payment" (
     "amount" numeric(9, 2) not null,
     "payment_method_id" int4 not null,
     "realisation_date" time,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "payment" add constraint "payment_pk" primary key ("id");
 alter table "payment" add constraint "payment_rent_fk" foreign key("rent_id") references "rent"("id")
@@ -211,8 +197,7 @@ alter table "payment" add constraint "payment_payment_method_fk" foreign key("pa
 create table if not exists "rent_item_status" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "rent_item_status" add constraint "rent_item_status_pk" primary key ("id");
 alter table "rent_item_status" add constraint "rent_item_status_uq" unique ("name");
@@ -226,8 +211,7 @@ create table if not exists "rent_item" (
     "rented_from" timestamp not null,
     "rented_to" timestamp,
     "paid_amount" numeric(8, 2),
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "rent_item" add constraint "rent_item_pk" primary key ("id");
 alter table "rent_item" add constraint "rent_item_rent_fk" foreign key("rent_id") references "rent"("id")
@@ -240,8 +224,7 @@ alter table "rent_item" add constraint "rent_item_rent_item_status_fk" foreign k
 create table if not exists "report_type" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "report_type" add constraint "report_type_pk" primary key ("id");
 alter table "report_type" add constraint "report_type_uq" unique ("name");
@@ -249,8 +232,7 @@ alter table "report_type" add constraint "report_type_uq" unique ("name");
 create table if not exists "report_status" (
     "id" serial,
     "name" varchar(50) not null,
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "report_status" add constraint "report_status_pk" primary key ("id");
 alter table "report_status" add constraint "report_status_uq" unique ("name");
@@ -261,8 +243,7 @@ create table if not exists "report" (
     "report_date" time not null,
     "report_type_id" int4 not null,
     "description" text not null,
-    "report_status_id" int4 not null,
-    "deleted" bool not null default false
+    "report_status_id" int4 not null
 );
 alter table "report" add constraint "report_pk" primary key ("id");
 alter table "report" add constraint "report_rent_fk" foreign key("rent_id") references "rent"("id")
@@ -282,7 +263,6 @@ create table if not exists "rental_data" (
     "post_code" varchar(10),
     "street" varchar(50),
     "house_number" varchar(10),
-    "description" text,
-    "deleted" bool not null default false
+    "description" text
     );
 alter table "rental_data" add constraint "rental_data_pk" primary key ("id");

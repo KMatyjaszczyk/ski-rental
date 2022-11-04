@@ -24,7 +24,4 @@ public class ItemStatus {
     @Column(name = "description")
     @Type(type = "org.hibernate.type.TextType")
     private String description;
-
-    @Column(name = "deleted", nullable = false)
-    private Boolean deleted = false;
 }
