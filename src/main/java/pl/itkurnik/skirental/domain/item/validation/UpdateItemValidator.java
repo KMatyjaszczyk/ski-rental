@@ -2,6 +2,7 @@ package pl.itkurnik.skirental.domain.item.validation;
 
 import org.springframework.stereotype.Component;
 import pl.itkurnik.skirental.domain.item.dto.UpdateItemRequest;
+import pl.itkurnik.skirental.domain.item.exception.UpdateItemValidationException;
 import pl.itkurnik.skirental.util.validation.MultipleFieldsValidator;
 import pl.itkurnik.skirental.util.validation.NegativeBigDecimalValidator;
 import pl.itkurnik.skirental.util.validation.NullObjectValidator;
@@ -18,10 +19,11 @@ public class UpdateItemValidator extends MultipleFieldsValidator<UpdateItemReque
         NullObjectValidator.validate(request.getItemStatusId(), "Item status id", errorMessages);
         NullObjectValidator.validate(request.getLastServiceDate(), "Last service date", errorMessages);
         NegativeBigDecimalValidator.validate(request.getPurchasePrice(), "Purchase price", errorMessages);
+        NegativeBigDecimalValidator.validate(request.getPriceValue(), "Price value", errorMessages);
     }
 
     @Override
     protected Class<? extends ValidationException> getValidationExceptionType() {
-        return null;
+        return UpdateItemValidationException.class;
     }
 }

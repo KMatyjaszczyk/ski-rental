@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.item.Price;
-import pl.itkurnik.skirental.domain.item.dto.CreatePriceRequest;
 import pl.itkurnik.skirental.domain.item.dto.PriceInfoDto;
-import pl.itkurnik.skirental.domain.item.exception.CreatePriceValidationException;
 import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
 import pl.itkurnik.skirental.domain.item.exception.PriceNotFoundException;
+import pl.itkurnik.skirental.domain.item.service.ItemPricesService;
 import pl.itkurnik.skirental.domain.item.service.PriceService;
 import pl.itkurnik.skirental.domain.item.util.PriceMapper;
 
@@ -26,6 +25,7 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 @Slf4j
 public class PriceController {
     private final PriceService priceService;
+    private final ItemPricesService itemPricesService;
 
     @GetMapping("/{id}")
     public ResponseEntity<PriceInfoDto> findById(@PathVariable Integer id) {
@@ -47,26 +47,10 @@ public class PriceController {
     public ResponseEntity<PriceInfoDto> findActualPriceForItemByItemId(@PathVariable Integer itemId) {
         try {
             log.info("Receiving actual price for item with id {}", itemId);
-            Price price = priceService.findActualPriceForItemByItemId(itemId);
+            Price price = itemPricesService.findActualPriceForItemByItemId(itemId);
             log.info("Actual price for item with id {} received successfully", itemId);
             return ResponseEntity.ok(PriceMapper.mapToInfoDto(price));
         } catch (ItemNotFoundException e) {
-            log.info(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CreatePriceRequest request) {
-        try {
-            log.info("Creating price with value {} for item with id {}", request.getPriceValue(), request.getItemId());
-            priceService.create(request);
-            log.info("Price with value {} for item with id {} created successfully", request.getPriceValue(), request.getItemId());
-            return ResponseEntity.ok().build();
-        } catch (CreatePriceValidationException | ItemNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {

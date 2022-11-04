@@ -17,4 +17,5 @@ public class UpdateItemRequest {
     private LocalDate lastServiceDate;
     private BigDecimal purchasePrice;
     private String description;
+    private BigDecimal priceValue;
 }

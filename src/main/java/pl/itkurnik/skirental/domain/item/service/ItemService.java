@@ -13,6 +13,7 @@ import pl.itkurnik.skirental.domain.item.Item;
 import pl.itkurnik.skirental.domain.item.ItemStatus;
 import pl.itkurnik.skirental.domain.item.Price;
 import pl.itkurnik.skirental.domain.item.dto.CreateItemRequest;
+import pl.itkurnik.skirental.domain.item.dto.CreatePriceRequest;
 import pl.itkurnik.skirental.domain.item.dto.PriceForCreateItemRequest;
 import pl.itkurnik.skirental.domain.item.dto.UpdateItemRequest;
 import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
@@ -22,6 +23,7 @@ import pl.itkurnik.skirental.domain.item.validation.CreateItemValidator;
 import pl.itkurnik.skirental.domain.item.validation.UpdateItemValidator;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
@@ -31,6 +33,7 @@ import java.util.List;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final PriceRepository priceRepository;
+    private final ItemPricesService itemPricesService;
     private final EquipmentService equipmentService;
     private final SizeService sizeService;
     private final ItemStatusService itemStatusService;
@@ -87,13 +90,14 @@ public class ItemService {
         Price price = new Price();
         price.setItem(item);
         price.setPriceValue(priceFromRequest.getPriceValue());
-        price.setValidFrom(Instant.now());
+        price.setValidFrom(Instant.now()); // TODO KM there always should be clock in Instant.now() https://youtu.be/PrPQ5xHYa0s
         price.setValidTo(null);
         price.setDescription(priceFromRequest.getDescription());
 
         priceRepository.save(price);
     }
 
+    @Transactional
     public void update(UpdateItemRequest request) {
         updateItemValidator.validateFields(request);
 
@@ -102,6 +106,7 @@ public class ItemService {
         updateProperFields(item, request);
 
         itemRepository.save(item);
+        updateActualPriceIfNecessary(item, request.getPriceValue());
     }
 
     private void updateProperFields(Item item, UpdateItemRequest request) {
@@ -127,4 +132,21 @@ public class ItemService {
             item.setDescription(request.getDescription());
         }
     }
+
+    private void updateActualPriceIfNecessary(Item item, BigDecimal priceValueFromRequest) {
+        Price actualPrice = itemPricesService.findActualPriceForItemByItemId(item.getId());
+
+        if (priceValueFromRequest.compareTo(actualPrice.getPriceValue()) != 0) {
+            updateActualPrice(item.getId(), priceValueFromRequest);
+        }
+    }
+
+    private void updateActualPrice(Integer itemId, BigDecimal priceValueFromRequest) {
+        CreatePriceRequest createPriceRequest = new CreatePriceRequest();
+        createPriceRequest.setItemId(itemId);
+        createPriceRequest.setPriceValue(priceValueFromRequest);
+
+        itemPricesService.createPriceForItem(createPriceRequest);
+    }
+
 }

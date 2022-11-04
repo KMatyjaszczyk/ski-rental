@@ -1,6 +1,8 @@
 package pl.itkurnik.skirental.domain.item.exception;
 
-public class UpdateItemValidationException extends RuntimeException {
+import pl.itkurnik.skirental.util.validation.ValidationException;
+
+public class UpdateItemValidationException extends ValidationException {
 
     public UpdateItemValidationException(String details) {
         super(String.format("Item update validation failed. Details: %s", details));
