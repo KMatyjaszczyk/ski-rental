@@ -9,6 +9,7 @@ import pl.itkurnik.skirental.domain.item.exception.PriceNotFoundException;
 import pl.itkurnik.skirental.domain.item.repository.PriceRepository;
 import pl.itkurnik.skirental.domain.item.util.PriceUtils;
 import pl.itkurnik.skirental.domain.item.validation.CreatePriceValidator;
+import pl.itkurnik.skirental.domain.item.validation.ItemExistsValidator;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
@@ -20,6 +21,7 @@ public class PriceService {
     private final PriceRepository priceRepository;
     private final ItemService itemService;
     private final ItemPricesService itemPricesService;
+    private final ItemExistsValidator itemExistsValidator;
     private final CreatePriceValidator createPriceValidator;
 
     public Price findById(Integer id) {
@@ -28,14 +30,10 @@ public class PriceService {
     }
 
     public Price findActualPriceForItemByItemId(Integer itemId) {
-        verifyIfItemExists(itemId);
+        itemExistsValidator.validateById(itemId);
 
         List<Price> prices = priceRepository.findAllByItem_Id(itemId);
         return PriceUtils.findActualPrice(prices, itemId);
-    }
-
-    private void verifyIfItemExists(Integer itemId) {
-        itemService.findById(itemId);
     }
 
     @Transactional

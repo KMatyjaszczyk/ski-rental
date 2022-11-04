@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.Price;
 import pl.itkurnik.skirental.domain.item.repository.PriceRepository;
+import pl.itkurnik.skirental.domain.item.validation.ItemExistsValidator;
 
 import java.time.Instant;
 import java.util.List;
@@ -14,10 +15,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemPricesService {
     private final PriceRepository priceRepository;
-    private final ItemService itemService;
+    private final ItemExistsValidator itemExistsValidator;
 
     public void makeItemPreviousPricesNotActual(Integer itemId, Instant validToTime) {
-        verifyIfItemExists(itemId);
+        itemExistsValidator.validateById(itemId);
 
         List<Price> itemPrices = priceRepository.findAllByItem_Id(itemId);
 
@@ -27,10 +28,6 @@ public class ItemPricesService {
 
         actualPrices.forEach(price -> price.setValidTo(validToTime));
         priceRepository.saveAll(actualPrices);
-    }
-
-    private void verifyIfItemExists(Integer itemID) {
-        itemService.findById(itemID);
     }
 
 }
