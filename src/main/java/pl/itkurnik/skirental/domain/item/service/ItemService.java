@@ -3,7 +3,6 @@ package pl.itkurnik.skirental.domain.item.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.Equipment;
 import pl.itkurnik.skirental.domain.equipment.Size;
@@ -53,12 +52,19 @@ public class ItemService {
         return itemRepository.findAllBySize_Id(sizeId);
     }
 
+    @Transactional
     public void deleteById(Integer id) {
-        try {
-            itemRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException ignored) {
-            log.info("Item with ID {} already deleted", id);
+        boolean itemDoesNotExist = !itemRepository.existsById(id);
+        if (itemDoesNotExist) {
+            return;
         }
+
+        deleteItemWithPrices(id);
+    }
+
+    private void deleteItemWithPrices(Integer id) {
+        priceRepository.deleteAllByItem_Id(id);
+        itemRepository.deleteById(id);
     }
 
     @Transactional
