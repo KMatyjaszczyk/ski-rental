@@ -9,6 +9,7 @@ drop table if exists "user";
 
 drop table if exists "price";
 drop table if exists "item";
+drop table if exists "equipment_image";
 drop table if exists "equipment";
 drop table if exists "size";
 drop table if exists "manufacturer";
@@ -85,6 +86,17 @@ alter table "equipment" add constraint "equipment_pk" primary key ("id");
 alter table "equipment" add constraint "equipment_manufacturer_fk" foreign key("manufacturer_id") references "manufacturer"("id")
     on update cascade on delete restrict;
 alter table "equipment" add constraint "equipment_equipment_category_fk" foreign key("equipment_category_id") references "equipment_category"("id")
+    on update cascade on delete restrict;
+
+create table if not exists "equipment_image" (
+    "id" serial,
+    "image_uuid" varchar(200) not null,
+    "equipment_id" int4 not null,
+    "description" text
+    );
+alter table "equipment_image" add constraint "equipment_image_pk" primary key ("id");
+alter table "equipment_image" add constraint "equipment_image_image_uuid_uq" unique ("image_uuid");
+alter table "equipment_image" add constraint "equipment_image_equipment_fk" foreign key("equipment_id") references "equipment"("id")
     on update cascade on delete restrict;
 
 create table if not exists "size" (

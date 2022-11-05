@@ -38,4 +38,7 @@ public class Equipment {
 
     @OneToMany(mappedBy = "equipment")
     private Set<Item> items = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "equipment")
+    private Set<EquipmentImage> equipmentImages = new LinkedHashSet<>();
 }

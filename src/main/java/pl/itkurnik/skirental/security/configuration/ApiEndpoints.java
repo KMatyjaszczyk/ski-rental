@@ -24,6 +24,7 @@ class ApiEndpoints {
             "/api/client_document_type",
             "/api/client_document_type/**",
             "/api/rent_status/**",
+            "/api/equipment_image/**",
     };
 
     public static final String[] EMPLOYEE = {
