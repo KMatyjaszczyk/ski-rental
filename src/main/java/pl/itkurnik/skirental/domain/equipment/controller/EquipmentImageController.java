@@ -11,9 +11,12 @@ import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.equipment.EquipmentImage;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateEquipmentImageRequest;
 import pl.itkurnik.skirental.domain.equipment.dto.EquipmentImageInfoDto;
+import pl.itkurnik.skirental.domain.equipment.dto.ImageUrlModel;
+import pl.itkurnik.skirental.domain.equipment.dto.ImageUrlResponse;
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentImageNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.service.EquipmentImageService;
 import pl.itkurnik.skirental.domain.equipment.util.EquipmentImageMapper;
+import pl.itkurnik.skirental.domain.equipment.util.ImageUrlMapper;
 
 import java.util.List;
 
@@ -45,12 +48,12 @@ public class EquipmentImageController {
     }
 
     @GetMapping("/equipment/{equipmentId}")
-    public ResponseEntity<List<EquipmentImageInfoDto>> findAllByIdEquipmentId(@PathVariable Integer equipmentId) {
+    public ResponseEntity<List<ImageUrlResponse>> findEquipmentImageUrls(@PathVariable Integer equipmentId) {
         try {
-            log.info("Receiving all images with equipment id {}", equipmentId);
-            List<EquipmentImage> equipmentImages = equipmentImageService.findAllByEquipmentId(equipmentId);
-            log.info("All images with equipment id {} received successfully", equipmentId);
-            return ResponseEntity.ok(EquipmentImageMapper.mapAllToInfoDto(equipmentImages));
+            log.info("Receiving all image URLs with equipment id {}", equipmentId);
+            List<ImageUrlModel> imageUrls = equipmentImageService.receiveEquipmentImagesUrls(equipmentId);
+            log.info("All image URLs with equipment id {} received successfully", equipmentId);
+            return ResponseEntity.ok(ImageUrlMapper.mapAllToResponse(imageUrls));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);

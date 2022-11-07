@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.equipment.Equipment;
 import pl.itkurnik.skirental.domain.equipment.EquipmentImage;
 import pl.itkurnik.skirental.domain.equipment.dto.CreateEquipmentImageRequest;
+import pl.itkurnik.skirental.domain.equipment.dto.ImageUrlModel;
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentImageNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.repository.EquipmentImageRepository;
 import pl.itkurnik.skirental.domain.equipment.util.EquipmentImageUuidGenerator;
@@ -13,6 +14,7 @@ import pl.itkurnik.skirental.s3.S3ImageService;
 import pl.itkurnik.skirental.util.MultipartFileUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +29,22 @@ public class EquipmentImageService {
                 .orElseThrow(() -> new EquipmentImageNotFoundException(id));
     }
 
-    public List<EquipmentImage> findAllByEquipmentId(Integer equipmentId) {
-        return equipmentImageRepository.findAllByEquipment_Id(equipmentId);
+    public List<ImageUrlModel> receiveEquipmentImagesUrls(Integer equipmentId) {
+        List<EquipmentImage> equipmentImages = equipmentImageRepository.findAllByEquipment_Id(equipmentId);
+
+        return equipmentImages.stream()
+                .map(this::mapEquipmentImageToUrlModel)
+                .collect(Collectors.toList());
+    }
+
+    private ImageUrlModel mapEquipmentImageToUrlModel(EquipmentImage equipmentImage) {
+        ImageUrlModel imageUrl = new ImageUrlModel();
+
+        imageUrl.setId(equipmentImage.getId());
+        imageUrl.setEquipmentId(equipmentImage.getEquipment().getId());
+        imageUrl.setUrl(s3ImageService.receiveUrl(equipmentImage.getImageUuid()));
+
+        return imageUrl;
     }
 
     public void create(CreateEquipmentImageRequest request) {
