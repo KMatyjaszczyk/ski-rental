@@ -9,6 +9,8 @@ import pl.itkurnik.skirental.domain.equipment.exception.EquipmentImageNotFoundEx
 import pl.itkurnik.skirental.domain.equipment.repository.EquipmentImageRepository;
 import pl.itkurnik.skirental.domain.equipment.util.EquipmentImageUuidGenerator;
 import pl.itkurnik.skirental.domain.equipment.validation.CreateEquipmentImageValidator;
+import pl.itkurnik.skirental.s3.S3ImageService;
+import pl.itkurnik.skirental.util.MultipartFileUtils;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class EquipmentImageService {
     private final EquipmentImageRepository equipmentImageRepository;
     private final EquipmentService equipmentService;
+    private final S3ImageService s3ImageService;
     private final CreateEquipmentImageValidator createEquipmentImageValidator;
 
     public EquipmentImage findById(Integer id) {
@@ -32,11 +35,12 @@ public class EquipmentImageService {
         createEquipmentImageValidator.validateFields(request);
 
         Equipment equipment = equipmentService.findById(request.getEquipmentId());
-        String imageUuid = EquipmentImageUuidGenerator.generate(equipment);
-
-        // TODO KM S3 magic here
+        String imageExtension = MultipartFileUtils.extractExtension(request.getImage());
+        String imageUuid = EquipmentImageUuidGenerator.generate(equipment, imageExtension);
 
         createEquipmentImage(equipment, imageUuid);
+
+        s3ImageService.putImage(request.getImage(), imageUuid);
     }
 
     private void createEquipmentImage(Equipment equipment, String imageUuid) {
