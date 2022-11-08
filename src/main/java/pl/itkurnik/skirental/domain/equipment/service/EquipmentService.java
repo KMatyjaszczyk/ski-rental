@@ -52,12 +52,12 @@ public class EquipmentService {
         }
     }
 
-    public void create(CreateEquipmentRequest request) {
+    public Equipment create(CreateEquipmentRequest request) {
         createEquipmentValidator.validateFields(request);
-        createEquipment(request);
+        return createEquipment(request);
     }
 
-    private void createEquipment(CreateEquipmentRequest request) {
+    private Equipment createEquipment(CreateEquipmentRequest request) {
         Manufacturer manufacturer = manufacturerService.findById(
                 request.getManufacturerId());
         EquipmentCategory category = equipmentCategoryService.findById(
@@ -69,7 +69,7 @@ public class EquipmentService {
         equipment.setEquipmentCategory(category);
         equipment.setDescription(request.getDescription());
 
-        equipmentRepository.save(equipment);
+        return equipmentRepository.save(equipment);
     }
 
     public void update(UpdateEquipmentRequest request) {

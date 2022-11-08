@@ -84,12 +84,12 @@ public class EquipmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CreateEquipmentRequest request) {
+    public ResponseEntity<EquipmentInfoDto> create(@RequestBody CreateEquipmentRequest request) {
         try {
             log.info("Creating equipment {}", request.getModel());
-            equipmentService.create(request);
+            Equipment equipment = equipmentService.create(request);
             log.info("Equipment {} successfully created", request.getModel());
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(EquipmentMapper.mapToInfoDto(equipment));
         } catch (CreateEquipmentValidationException | ManufacturerNotFoundException |
                  EquipmentCategoryNotFoundException e) {
             log.info(e.getMessage(), e);
