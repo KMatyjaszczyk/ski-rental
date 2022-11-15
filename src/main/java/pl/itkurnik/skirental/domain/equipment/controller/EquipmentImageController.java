@@ -73,4 +73,17 @@ public class EquipmentImageController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+        try {
+            log.info("Deleting equipment image with id {}", id);
+            equipmentImageService.deleteById(id);
+            log.info("Equipment image with id {} deleted successfully", id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 }

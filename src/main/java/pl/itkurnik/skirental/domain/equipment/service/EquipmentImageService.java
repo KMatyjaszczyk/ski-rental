@@ -13,6 +13,7 @@ import pl.itkurnik.skirental.domain.equipment.validation.CreateEquipmentImageVal
 import pl.itkurnik.skirental.s3.S3ImageService;
 import pl.itkurnik.skirental.util.MultipartFileUtils;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,7 @@ public class EquipmentImageService {
         return imageUrl;
     }
 
+    @Transactional
     public void create(CreateEquipmentImageRequest request) {
         createEquipmentImageValidator.validateFields(request);
 
@@ -56,7 +58,7 @@ public class EquipmentImageService {
 
         createEquipmentImage(equipment, imageUuid);
 
-        s3ImageService.putImage(request.getImage(), imageUuid);
+        s3ImageService.upload(request.getImage(), imageUuid);
     }
 
     private void createEquipmentImage(Equipment equipment, String imageUuid) {
@@ -66,5 +68,18 @@ public class EquipmentImageService {
         equipmentImage.setEquipment(equipment);
 
         equipmentImageRepository.save(equipmentImage);
+    }
+
+    @Transactional
+    public void deleteById(Integer id) {
+        boolean imageDoesNotExist = !equipmentImageRepository.existsById(id);
+        if (imageDoesNotExist) {
+            return;
+        }
+
+        EquipmentImage image = findById(id);
+
+        equipmentImageRepository.deleteById(id);
+        s3ImageService.delete(image.getImageUuid());
     }
 }
