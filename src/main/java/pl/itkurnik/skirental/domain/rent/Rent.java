@@ -3,7 +3,6 @@ package pl.itkurnik.skirental.domain.rent;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import pl.itkurnik.skirental.domain.payment.Payment;
-import pl.itkurnik.skirental.domain.rentitem.RentItem;
 import pl.itkurnik.skirental.domain.report.Report;
 import pl.itkurnik.skirental.domain.user.User;
 

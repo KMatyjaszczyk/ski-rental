@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.domain.rentitem;
+package pl.itkurnik.skirental.domain.rent;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
