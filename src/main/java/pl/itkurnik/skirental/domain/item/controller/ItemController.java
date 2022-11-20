@@ -33,6 +33,19 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 public class ItemController {
     private final ItemService itemService;
 
+    @GetMapping
+    public ResponseEntity<List<ItemInfoDto>> findAll() {
+        try {
+            log.info("Receiving all items");
+            List<Item> items = itemService.findAll();
+            log.info("All items received successfully");
+            return ResponseEntity.ok(ItemMapper.mapAllToInfoDto(items));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ItemInfoDto> findById(@PathVariable Integer id) {
         try {

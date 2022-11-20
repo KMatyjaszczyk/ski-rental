@@ -39,6 +39,10 @@ public class ItemService {
     private final CreateItemValidator createItemValidator;
     private final UpdateItemValidator updateItemValidator;
 
+    public List<Item> findAll() {
+        return itemRepository.findAll();
+    }
+
     public Item findById(Integer id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
