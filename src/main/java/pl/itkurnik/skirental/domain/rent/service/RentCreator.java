@@ -7,6 +7,7 @@ import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.RentStatus;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.repository.RentRepository;
+import pl.itkurnik.skirental.domain.rent.validation.CreateRentValidator;
 import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.service.UserService;
 
@@ -15,12 +16,15 @@ import java.time.Instant;
 @Service
 @RequiredArgsConstructor
 class RentCreator {
+    private final CreateRentValidator createRentValidator;
     private final RentRepository rentRepository;
     private final UserService userService;
     private final RentStatusService rentStatusService;
     private final ClientDocumentTypeService clientDocumentTypeService;
 
     public Rent createFromRequest(CreateRentRequest request, Instant createTime) {
+        createRentValidator.validateRequest(request);
+
         Rent rent = createRent(request, createTime);
         return rentRepository.save(rent);
     }

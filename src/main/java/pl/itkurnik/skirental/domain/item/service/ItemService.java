@@ -43,6 +43,10 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
+    public List<Item> findAllByIds(List<Integer> ids) {
+        return itemRepository.findAllByIdIn(ids);
+    }
+
     public Item findById(Integer id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));

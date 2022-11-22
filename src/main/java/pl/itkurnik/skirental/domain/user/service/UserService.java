@@ -82,4 +82,8 @@ public class UserService {
             user.setEmail(request.getEmail());
         }
     }
+
+    public Boolean existsById(Integer id) {
+        return userRepository.existsById(id);
+    }
 }
