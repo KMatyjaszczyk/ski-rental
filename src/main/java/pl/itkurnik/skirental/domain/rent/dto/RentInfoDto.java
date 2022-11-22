@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.itkurnik.skirental.domain.auth.dto.UserInfoDto;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -14,9 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 public class RentInfoDto {
     private Integer id;
-    private LocalTime rentDate;
+    private Instant rentDate;
     private LocalDate plannedReturnDate;
-    private LocalTime endDate;
+    private Instant endDate;
     private UserInfoDto client;
     private RentStatusInfoDto rentStatus;
     private ClientDocumentTypeInfoDto clientDocumentType;

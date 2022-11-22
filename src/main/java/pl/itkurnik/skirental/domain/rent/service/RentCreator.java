@@ -11,8 +11,6 @@ import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.service.UserService;
 
 import java.time.Instant;
-import java.time.LocalTime;
-import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +19,6 @@ class RentCreator {
     private final UserService userService;
     private final RentStatusService rentStatusService;
     private final ClientDocumentTypeService clientDocumentTypeService;
-    private final ZoneId zoneId;
 
     public Rent createFromRequest(CreateRentRequest request, Instant createTime) {
         Rent rent = createRent(request, createTime);
@@ -29,14 +26,13 @@ class RentCreator {
     }
 
     private Rent createRent(CreateRentRequest request, Instant createTime) {
-        LocalTime rentDate = createTime.atZone(zoneId).toLocalTime();
         User client = userService.findById(request.getClientId());
         RentStatus rentedStatus = rentStatusService.getRentedStatus();
         ClientDocumentType clientDocumentType = clientDocumentTypeService.findById(request.getClientDocumentTypeId());
         User employee = userService.findById(request.getEmployeeId());
 
         return Rent.builder()
-                .rentDate(rentDate)
+                .rentDate(createTime)
                 .plannedReturnDate(request.getPlannedReturnDate())
                 .client(client)
                 .rentStatus(rentedStatus)

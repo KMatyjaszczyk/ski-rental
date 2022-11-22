@@ -5,7 +5,7 @@ import org.hibernate.annotations.Type;
 import pl.itkurnik.skirental.domain.rent.Rent;
 
 import javax.persistence.*;
-import java.time.LocalTime;
+import java.time.Instant;
 
 @Builder
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class Report {
     private Rent rent;
 
     @Column(name = "report_date", nullable = false)
-    private LocalTime reportDate;
+    private Instant reportDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "report_type_id", nullable = false)

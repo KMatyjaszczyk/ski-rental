@@ -172,9 +172,9 @@ alter table "payment_method" add constraint "payment_method_name_uq" unique ("na
 
 create table if not exists "rent" (
     "id" serial,
-    "rent_date" time not null,
+    "rent_date" timestamp not null,
     "planned_return_date" date not null,
-    "end_date" time,
+    "end_date" timestamp,
     "client_id" int4 not null,
     "rent_status_id" int4 not null,
     "client_document_type_id" int4 not null,
@@ -197,7 +197,7 @@ create table if not exists "payment" (
     "rent_id" int4 not null,
     "amount" numeric(9, 2) not null,
     "payment_method_id" int4 not null,
-    "realisation_date" time,
+    "realisation_date" timestamp,
     "description" text
     );
 alter table "payment" add constraint "payment_pk" primary key ("id");
@@ -252,7 +252,7 @@ alter table "report_status" add constraint "report_status_uq" unique ("name");
 create table if not exists "report" (
     "id" serial,
     "rent_id" int4 not null,
-    "report_date" time not null,
+    "report_date" timestamp not null,
     "report_type_id" int4 not null,
     "description" text not null,
     "report_status_id" int4 not null

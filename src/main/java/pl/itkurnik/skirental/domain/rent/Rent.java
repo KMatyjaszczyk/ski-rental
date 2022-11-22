@@ -7,8 +7,8 @@ import pl.itkurnik.skirental.domain.report.Report;
 import pl.itkurnik.skirental.domain.user.User;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -26,13 +26,13 @@ public class Rent {
     private Integer id;
 
     @Column(name = "rent_date", nullable = false)
-    private LocalTime rentDate;
+    private Instant rentDate;
 
     @Column(name = "planned_return_date", nullable = false)
     private LocalDate plannedReturnDate;
 
     @Column(name = "end_date")
-    private LocalTime endDate;
+    private Instant endDate;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)

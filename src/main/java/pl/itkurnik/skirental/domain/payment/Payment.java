@@ -6,7 +6,7 @@ import pl.itkurnik.skirental.domain.rent.Rent;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalTime;
+import java.time.Instant;
 
 @Builder
 @AllArgsConstructor
@@ -33,7 +33,7 @@ public class Payment {
     private PaymentMethod paymentMethod;
 
     @Column(name = "realisation_date")
-    private LocalTime realisationDate;
+    private Instant realisationDate;
 
     @Column(name = "description")
     @Type(type = "org.hibernate.type.TextType")
