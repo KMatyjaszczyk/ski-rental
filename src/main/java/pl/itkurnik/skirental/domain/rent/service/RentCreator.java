@@ -23,7 +23,7 @@ class RentCreator {
     private final ClientDocumentTypeService clientDocumentTypeService;
     private final ZoneId zoneId;
 
-    public Rent fromRequest(CreateRentRequest request, Instant createTime) {
+    public Rent createFromRequest(CreateRentRequest request, Instant createTime) {
         Rent rent = createRent(request, createTime);
         return rentRepository.save(rent);
     }

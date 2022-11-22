@@ -22,7 +22,7 @@ public class RentItemsCreator {
     private final ItemPricesService itemPricesService;
     private final RentItemStatusService rentItemStatusService;
 
-    public void fromRequest(List<Integer> itemsIds, Rent savedRent, Instant rentCreateTime) {
+    public void createFromItemsByIds(List<Integer> itemsIds, Rent savedRent, Instant rentCreateTime) {
         List<Item> items = mapIdsFromRequestToItems(itemsIds);
         Set<RentItem> rentItems = mapItemsToRentItems(items, savedRent, rentCreateTime);
 
@@ -53,6 +53,4 @@ public class RentItemsCreator {
 
         return rentItem;
     }
-
-
 }

@@ -158,13 +158,4 @@ public class ItemService {
 
         itemPricesService.createPriceForItem(createPriceRequest);
     }
-
-    public void modifyItemsStatusByIds(List<Integer> itemsIds, ItemStatus statusToModify) {
-        List<Item> itemsToModify = itemRepository.findAllByIdIn(itemsIds);
-
-        itemsToModify.forEach(item ->
-                item.setItemStatus(statusToModify));
-
-        itemRepository.saveAll(itemsToModify);
-    }
 }
