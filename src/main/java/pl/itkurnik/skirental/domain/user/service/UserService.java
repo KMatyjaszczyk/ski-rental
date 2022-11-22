@@ -23,6 +23,11 @@ public class UserService {
     private final CreateUnregisteredUserValidator createUnregisteredUserValidator;
     private final UpdateUserValidator updateUserValidator;
 
+    public User findById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
@@ -44,7 +49,7 @@ public class UserService {
 
     public void deleteById(Integer id) {
         try {
-            userRepository.deleteById(id); // TODO KM preferred will be setting flag 'deleted'
+            userRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ignored) {
             log.info("User with ID {} already deleted", id);
         }

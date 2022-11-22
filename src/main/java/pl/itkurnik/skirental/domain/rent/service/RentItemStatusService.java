@@ -23,11 +23,11 @@ public class RentItemStatusService {
         return rentItemStatusRepository.findAll();
     }
 
-    private RentItemStatus getRentedStatus() {
+    public RentItemStatus getRentedStatus() {
         return findByName(RentItemStatuses.RENTED.getName());
     }
 
-    private RentItemStatus getFinishedStatus() {
+    public RentItemStatus getFinishedStatus() {
         return findByName(RentItemStatuses.FINISHED.getName());
     }
 
