@@ -25,6 +25,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +42,21 @@ public class ItemService {
 
     public List<Item> findAll() {
         return itemRepository.findAll();
+    }
+
+    public List<Item> findAllOpen() {
+        List<Item> allItems = itemRepository.findAll();
+
+        return allItems.stream()
+                .filter(this::isItemOpen)
+                .collect(Collectors.toList());
+    }
+
+    private boolean isItemOpen(Item item) {
+        Integer itemStatus = item.getItemStatus().getId();
+        Integer openStatus = itemStatusService.getOpenStatus().getId();
+
+        return itemStatus.equals(openStatus);
     }
 
     public List<Item> findAllByIds(List<Integer> ids) {
