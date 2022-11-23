@@ -7,12 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
+import pl.itkurnik.skirental.domain.rent.dto.RentInfoDto;
 import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
 import pl.itkurnik.skirental.domain.rent.exception.CreateRentValidationException;
 import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
 import pl.itkurnik.skirental.domain.rent.exception.ReturnRentItemsValidationException;
 import pl.itkurnik.skirental.domain.rent.service.RentService;
+import pl.itkurnik.skirental.domain.rent.util.RentMapper;
 import pl.itkurnik.skirental.util.error.ObjectNotFoundException;
 
 import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
@@ -25,6 +28,22 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 @Slf4j
 public class RentController {
     private final RentService rentService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RentInfoDto> findById(@PathVariable Integer id) {
+        try {
+            log.info("Receiving rent with id {}", id);
+            Rent rent = rentService.findById(id);
+            log.info("Rent with id {} received successfully", id);
+            return ResponseEntity.ok(RentMapper.mapToInfoDto(rent));
+        } catch (RentNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Void> create(@RequestBody CreateRentRequest request) {
