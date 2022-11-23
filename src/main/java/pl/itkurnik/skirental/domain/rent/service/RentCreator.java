@@ -7,7 +7,7 @@ import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.RentStatus;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.repository.RentRepository;
-import pl.itkurnik.skirental.domain.rent.validation.CreateRentValidator;
+import pl.itkurnik.skirental.domain.rent.validation.create.CreateRentValidator;
 import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.service.UserService;
 

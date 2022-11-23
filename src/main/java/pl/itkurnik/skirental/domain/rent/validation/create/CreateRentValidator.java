@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.domain.rent.validation;
+package pl.itkurnik.skirental.domain.rent.validation.create;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 @RequiredArgsConstructor
 public class CreateRentValidator {
     private final CreateRentFieldsValidator fieldsValidator;
-    private final ItemsForRentValidator itemsValidator;
+    private final ItemsForCreateRentValidator itemsValidator;
     private final UsersForRentValidator usersValidator;
 
     public void validateRequest(CreateRentRequest request) {

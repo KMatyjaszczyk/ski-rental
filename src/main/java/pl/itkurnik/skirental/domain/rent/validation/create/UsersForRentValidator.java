@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.domain.rent.validation;
+package pl.itkurnik.skirental.domain.rent.validation.create;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

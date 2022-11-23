@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RentItemsCreator {
+class RentItemsCreator {
     private final RentItemRepository rentItemRepository;
     private final ItemService itemService;
     private final ItemPricesService itemPricesService;

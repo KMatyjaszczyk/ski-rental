@@ -1,4 +1,4 @@
-package pl.itkurnik.skirental.domain.rent.validation;
+package pl.itkurnik.skirental.domain.rent.validation.create;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class ItemsForRentValidator {
+class ItemsForCreateRentValidator {
     private final ItemService itemService;
     private final ItemStatusService itemStatusService;
 
