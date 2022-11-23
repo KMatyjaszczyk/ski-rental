@@ -14,6 +14,10 @@ public class ItemStatusChanger {
     private final ItemRepository itemRepository;
     private final ItemStatusService itemStatusService;
 
+    public void changeAllToOpen(List<Integer> itemIds) {
+        changeItemsStatus(itemIds, itemStatusService.getOpenStatus());
+    }
+
     public void changeAllToRented(List<Integer> itemsIds) {
         changeItemsStatus(itemsIds, itemStatusService.getRentedStatus());
     }

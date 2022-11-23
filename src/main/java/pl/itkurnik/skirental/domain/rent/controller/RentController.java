@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
+import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
 import pl.itkurnik.skirental.domain.rent.exception.CreateRentValidationException;
 import pl.itkurnik.skirental.domain.rent.service.RentService;
 import pl.itkurnik.skirental.util.error.ObjectNotFoundException;
@@ -39,6 +40,19 @@ public class RentController {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
+    @PutMapping("/items/return")
+    public ResponseEntity<Void> returnItems(@RequestBody ReturnRentItemsRequest request) {
+        try {
+            log.info("Returning items for rent with id {}", request.getRentId());
+            rentService.returnItems(request);
+            log.info("Items for rent with id {} returned successfully", request.getRentId());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
     }
 }

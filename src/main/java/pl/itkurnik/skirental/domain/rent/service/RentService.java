@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.service.ItemStatusChanger;
 import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
+import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
@@ -16,6 +17,7 @@ public class RentService {
     private final RentCreator rentCreator;
     private final RentItemsCreator rentItemsCreator;
     private final ItemStatusChanger itemStatusChanger;
+    private final RentItemsReturner rentItemsReturner;
 
     @Transactional
     public void create(CreateRentRequest request) {
@@ -33,5 +35,16 @@ public class RentService {
 
     private void changeItemsStatusToRented(List<Integer> itemsIds) {
         itemStatusChanger.changeAllToRented(itemsIds);
+    }
+
+    @Transactional
+    public void returnItems(ReturnRentItemsRequest request) {
+        rentItemsReturner.returnItems(request);
+        
+        changeItemsStatusToOpen(request.getItemsIds());
+    }
+
+    private void changeItemsStatusToOpen(List<Integer> itemsIds) {
+        itemStatusChanger.changeAllToOpen(itemsIds);
     }
 }
