@@ -1,6 +1,8 @@
 package pl.itkurnik.skirental.domain.rent.exception;
 
-public class RentStatusNotFoundException extends RuntimeException {
+import pl.itkurnik.skirental.util.error.ObjectNotFoundException;
+
+public class RentStatusNotFoundException extends ObjectNotFoundException {
 
     public RentStatusNotFoundException(Integer id) {
         super(String.format("Order status with id %d not found", id));
