@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.Item;
 import pl.itkurnik.skirental.domain.item.ItemStatus;
+import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
 import pl.itkurnik.skirental.domain.item.repository.ItemRepository;
 
 import java.util.List;
@@ -14,8 +15,17 @@ public class ItemStatusChanger {
     private final ItemRepository itemRepository;
     private final ItemStatusService itemStatusService;
 
-    public void changeAllToOpen(List<Integer> itemIds) {
-        changeItemsStatus(itemIds, itemStatusService.getOpenStatus());
+    public void changeToOpen(Integer itemId) {
+        changeItemStatus(itemId, itemStatusService.getOpenStatus());
+    }
+
+    private void changeItemStatus(Integer itemId, ItemStatus statusToModify) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(itemId));
+
+        item.setItemStatus(statusToModify);
+
+        itemRepository.save(item);
     }
 
     public void changeAllToRented(List<Integer> itemsIds) {
@@ -30,5 +40,4 @@ public class ItemStatusChanger {
 
         itemRepository.saveAll(itemsToModify);
     }
-
 }

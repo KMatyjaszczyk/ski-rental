@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
 import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.dto.RentInfoDto;
-import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
+import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
 import pl.itkurnik.skirental.domain.rent.exception.CreateRentValidationException;
 import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
 import pl.itkurnik.skirental.domain.rent.exception.ReturnRentItemsValidationException;
@@ -64,14 +65,14 @@ public class RentController {
         }
     }
 
-    @PutMapping("/items/return")
-    public ResponseEntity<Void> returnItems(@RequestBody ReturnRentItemsRequest request) {
+    @PutMapping("/item/return")
+    public ResponseEntity<Void> returnItem(@RequestBody ReturnRentItemRequest request) {
         try {
-            log.info("Returning items for rent with id {}", request.getRentId());
-            rentService.returnItems(request);
-            log.info("Items for rent with id {} returned successfully", request.getRentId());
+            log.info("Returning item for rent with id {}", request.getRentId());
+            rentService.returnItem(request);
+            log.info("Item for rent with id {} returned successfully", request.getRentId());
             return ResponseEntity.ok().build();
-        } catch (RentNotFoundException e) {
+        } catch (RentNotFoundException | ItemNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ReturnRentItemsValidationException | ObjectNotFoundException e){

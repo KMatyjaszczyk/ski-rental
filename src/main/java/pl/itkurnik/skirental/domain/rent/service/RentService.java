@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.service.ItemStatusChanger;
 import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
-import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
+import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
 import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
 import pl.itkurnik.skirental.domain.rent.repository.RentRepository;
 
@@ -46,13 +46,10 @@ public class RentService {
     }
 
     @Transactional
-    public void returnItems(ReturnRentItemsRequest request) {
-        rentItemsReturner.returnItems(request);
-        
-        changeItemsStatusToOpen(request.getItemsIds());
-    }
+    public void returnItem(ReturnRentItemRequest request) {
+        rentItemsReturner.returnItem(request);
+        // TODO KM verify if all items from rent were returned
 
-    private void changeItemsStatusToOpen(List<Integer> itemsIds) {
-        itemStatusChanger.changeAllToOpen(itemsIds);
+        itemStatusChanger.changeToOpen(request.getItemId());
     }
 }

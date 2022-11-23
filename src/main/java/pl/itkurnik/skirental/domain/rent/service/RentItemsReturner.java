@@ -2,22 +2,18 @@ package pl.itkurnik.skirental.domain.rent.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
-import pl.itkurnik.skirental.domain.rent.validation.returnn.ReturnRentItemsValidator;
+import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
+import pl.itkurnik.skirental.domain.rent.validation.returnn.ReturnRentItemValidator;
 
 @Service
 @RequiredArgsConstructor
 class RentItemsReturner {
-    private final ReturnRentItemsValidator returnRentItemsValidator;
+    private final ReturnRentItemValidator returnRentItemValidator;
     private final RentItemService rentItemService;
 
-    public void returnItems(ReturnRentItemsRequest request) {
-        returnRentItemsValidator.validate(request);
+    public void returnItem(ReturnRentItemRequest request) {
+        returnRentItemValidator.validate(request);
 
-        makeRentItemsReturned(request);
-    }
-
-    private void makeRentItemsReturned(ReturnRentItemsRequest request) {
-        rentItemService.returnRentItems(request);
+        rentItemService.returnRentItem(request);
     }
 }

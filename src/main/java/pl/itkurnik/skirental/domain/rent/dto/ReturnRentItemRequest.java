@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReturnRentItemsRequest {
+public class ReturnRentItemRequest {
     private Integer rentId;
-    private List<Integer> itemsIds;
+    private Integer itemId;
 }

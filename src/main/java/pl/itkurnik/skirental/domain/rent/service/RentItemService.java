@@ -3,11 +3,11 @@ package pl.itkurnik.skirental.domain.rent.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.rent.RentItem;
-import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
+import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
+import pl.itkurnik.skirental.domain.rent.exception.RentItemNotFoundException;
 import pl.itkurnik.skirental.domain.rent.repository.RentItemRepository;
 
 import java.time.Instant;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,19 +15,18 @@ public class RentItemService {
     private final RentItemRepository rentItemRepository;
     private final RentItemStatusService rentItemStatusService;
 
-    public List<RentItem> findAllByRentIdAndItemsIds(Integer rentId, List<Integer> itemsIds) {
-        return rentItemRepository.findAllByRent_IdAndItem_IdIn(rentId, itemsIds);
+    public RentItem findByRentIdAndItemId(Integer rentId, Integer itemId) {
+        return rentItemRepository.findByRent_IdAndItem_Id(rentId, itemId)
+                .orElseThrow(() -> new RentItemNotFoundException(rentId, itemId));
     }
 
-    public void returnRentItems(ReturnRentItemsRequest request) {
-        List<RentItem> rentItems = findAllByRentIdAndItemsIds(request.getRentId(), request.getItemsIds());
+    public void returnRentItem(ReturnRentItemRequest request) {
+        RentItem rentItem = findByRentIdAndItemId(request.getRentId(), request.getItemId());
         Instant returnDate = Instant.now();
 
-        for (RentItem rentItem : rentItems) {
-            rentItem.setRentedTo(returnDate);
-            rentItem.setRentItemStatus(rentItemStatusService.getFinishedStatus());
-        }
+        rentItem.setRentedTo(returnDate);
+        rentItem.setRentItemStatus(rentItemStatusService.getFinishedStatus());
 
-        rentItemRepository.saveAll(rentItems);
+        rentItemRepository.save(rentItem);
     }
 }
