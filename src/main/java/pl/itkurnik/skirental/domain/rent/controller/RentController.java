@@ -10,6 +10,8 @@ import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemsRequest;
 import pl.itkurnik.skirental.domain.rent.exception.CreateRentValidationException;
+import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
+import pl.itkurnik.skirental.domain.rent.exception.ReturnRentItemsValidationException;
 import pl.itkurnik.skirental.domain.rent.service.RentService;
 import pl.itkurnik.skirental.util.error.ObjectNotFoundException;
 
@@ -50,9 +52,18 @@ public class RentController {
             rentService.returnItems(request);
             log.info("Items for rent with id {} returned successfully", request.getRentId());
             return ResponseEntity.ok().build();
+        } catch (RentNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ReturnRentItemsValidationException | ObjectNotFoundException e){
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
 }
