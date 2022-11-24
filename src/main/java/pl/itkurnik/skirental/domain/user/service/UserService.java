@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import pl.itkurnik.skirental.domain.role.Role;
 import pl.itkurnik.skirental.domain.role.RoleService;
 import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.dto.CreateUnregisteredUserRequest;
@@ -13,6 +14,10 @@ import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
 import pl.itkurnik.skirental.domain.user.repository.UserRepository;
 import pl.itkurnik.skirental.domain.user.validation.CreateUnregisteredUserValidator;
 import pl.itkurnik.skirental.domain.user.validation.UpdateUserValidator;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +36,12 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
+    }
+
+    public List<User> findAllClients() {
+        Set<Role> clientRoleSingleton = Collections.singleton(roleService.getClientRole());
+
+        return userRepository.findAllByRolesIn(clientRoleSingleton);
     }
 
     public void createUnregisteredUser(CreateUnregisteredUserRequest request) {

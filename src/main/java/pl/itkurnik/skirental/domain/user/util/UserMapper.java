@@ -4,6 +4,7 @@ import pl.itkurnik.skirental.domain.auth.dto.UserInfoDto;
 import pl.itkurnik.skirental.domain.role.Role;
 import pl.itkurnik.skirental.domain.user.User;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserMapper {
@@ -21,5 +22,11 @@ public class UserMapper {
                 .map(Role::getName).collect(Collectors.toSet()));
 
         return userInfo;
+    }
+
+    public static List<UserInfoDto> mapAllToInfoDto(List<User> users) {
+        return users.stream()
+                .map(UserMapper::mapToInfoDto)
+                .collect(Collectors.toList());
     }
 }

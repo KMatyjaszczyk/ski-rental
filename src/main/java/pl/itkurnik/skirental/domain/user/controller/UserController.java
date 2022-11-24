@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.domain.auth.dto.UserInfoDto;
+import pl.itkurnik.skirental.domain.user.User;
 import pl.itkurnik.skirental.domain.user.dto.CreateUnregisteredUserRequest;
 import pl.itkurnik.skirental.domain.user.dto.UpdateUserRequest;
 import pl.itkurnik.skirental.domain.user.exception.CreateUserValidationException;
@@ -14,6 +16,9 @@ import pl.itkurnik.skirental.domain.user.exception.PhoneNumberAlreadyTakenExcept
 import pl.itkurnik.skirental.domain.user.exception.UpdateUserValidationException;
 import pl.itkurnik.skirental.domain.user.exception.UserNotFoundException;
 import pl.itkurnik.skirental.domain.user.service.UserService;
+import pl.itkurnik.skirental.domain.user.util.UserMapper;
+
+import java.util.List;
 
 import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
 import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
@@ -25,6 +30,19 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 @Slf4j
 public class UserController {
     private final UserService userService;
+
+    @GetMapping("/client")
+    public ResponseEntity<List<UserInfoDto>> findAllClients() {
+        try {
+            log.info("Receiving all client users");
+            List<User> clients = userService.findAllClients();
+            log.info("All client users received successfully");
+            return ResponseEntity.ok(UserMapper.mapAllToInfoDto(clients));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Void> createUnregisteredUser(@RequestBody CreateUnregisteredUserRequest request) {
