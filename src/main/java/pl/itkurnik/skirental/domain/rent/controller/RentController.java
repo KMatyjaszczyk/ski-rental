@@ -19,6 +19,8 @@ import pl.itkurnik.skirental.domain.rent.service.RentService;
 import pl.itkurnik.skirental.domain.rent.util.RentMapper;
 import pl.itkurnik.skirental.util.error.ObjectNotFoundException;
 
+import java.util.List;
+
 import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
 import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 
@@ -30,6 +32,19 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 public class RentController {
     private final RentService rentService;
 
+    @GetMapping
+    public ResponseEntity<List<RentInfoDto>> findAll() {
+        try {
+            log.info("Receiving all rents");
+            List<Rent> rents = rentService.findAll();
+            log.info("All rents received successfully");
+            return ResponseEntity.ok(RentMapper.mapAllToInfoDto(rents));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RentInfoDto> findById(@PathVariable Integer id) {
         try {
@@ -40,6 +55,19 @@ public class RentController {
         } catch (RentNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<RentInfoDto>> findAllByClientId(@PathVariable Integer clientId) {
+        try {
+            log.info("Receiving all rents for client with id {}", clientId);
+            List<Rent> rents = rentService.findAllByClientId(clientId);
+            log.info("All rents for client with id {} received successfully", clientId);
+            return ResponseEntity.ok(RentMapper.mapAllToInfoDto(rents));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);

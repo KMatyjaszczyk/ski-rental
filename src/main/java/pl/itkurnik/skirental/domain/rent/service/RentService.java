@@ -23,9 +23,17 @@ public class RentService {
     private final RentItemsReturner rentItemsReturner;
     private final RentFinisher rentFinisher;
 
+    public List<Rent> findAll() {
+        return rentRepository.findAll();
+    }
+
     public Rent findById(Integer id) {
         return rentRepository.findById(id)
                 .orElseThrow(() -> new RentNotFoundException(id));
+    }
+
+    public List<Rent> findAllByClientId(Integer clientId) {
+        return rentRepository.findAllByClient_Id(clientId);
     }
 
     @Transactional
