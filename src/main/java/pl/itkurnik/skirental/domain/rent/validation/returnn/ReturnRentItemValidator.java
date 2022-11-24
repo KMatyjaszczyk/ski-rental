@@ -15,7 +15,7 @@ public class ReturnRentItemValidator {
 
     public void validate(ReturnRentItemRequest request) {
         fieldsValidator.validateFields(request);
-        rentValidator.validateIfRentExistsById(request.getRentId());
+        rentValidator.validateIfRentIsInRentedState(request.getRentId());
         itemValidator.validateById(request.getItemId());
         rentItemValidator.validateByRequest(request);
     }

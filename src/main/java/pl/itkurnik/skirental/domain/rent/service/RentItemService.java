@@ -20,13 +20,12 @@ public class RentItemService {
                 .orElseThrow(() -> new RentItemNotFoundException(rentId, itemId));
     }
 
-    public void returnRentItem(ReturnRentItemRequest request) {
+    public void returnRentItem(ReturnRentItemRequest request, Instant finishDate) {
         RentItem rentItem = findByRentIdAndItemId(request.getRentId(), request.getItemId());
-        Instant returnDate = Instant.now();
 
-        rentItem.setRentedTo(returnDate);
+        rentItem.setRentedTo(finishDate);
         rentItem.setRentItemStatus(rentItemStatusService.getFinishedStatus());
 
-        rentItemRepository.save(rentItem);
+        rentItemRepository.saveAndFlush(rentItem);
     }
 }

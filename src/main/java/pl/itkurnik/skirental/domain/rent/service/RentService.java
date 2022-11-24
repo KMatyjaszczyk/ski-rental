@@ -21,6 +21,7 @@ public class RentService {
     private final RentItemsCreator rentItemsCreator;
     private final ItemStatusChanger itemStatusChanger;
     private final RentItemsReturner rentItemsReturner;
+    private final RentFinisher rentFinisher;
 
     public Rent findById(Integer id) {
         return rentRepository.findById(id)
@@ -47,9 +48,14 @@ public class RentService {
 
     @Transactional
     public void returnItem(ReturnRentItemRequest request) {
-        rentItemsReturner.returnItem(request);
-        // TODO KM verify if all items from rent were returned
+        Instant finishDate = Instant.now();
 
+        returnItem(request, finishDate);
+        rentFinisher.finishRentIfNecessary(request.getRentId(), finishDate);
+    }
+
+    private void returnItem(ReturnRentItemRequest request, Instant finishDate) {
+        rentItemsReturner.returnItem(request, finishDate);
         itemStatusChanger.changeToOpen(request.getItemId());
     }
 }
