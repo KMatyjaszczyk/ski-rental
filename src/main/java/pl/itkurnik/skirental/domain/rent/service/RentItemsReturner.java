@@ -14,8 +14,8 @@ class RentItemsReturner {
     private final RentItemService rentItemService;
 
     public void returnItem(ReturnRentItemRequest request, Instant finishDate) {
-        returnRentItemValidator.validate(request);
+        returnRentItemValidator.validateReturnSingleItem(request);
 
-        rentItemService.returnRentItem(request, finishDate);
+        rentItemService.returnSingleRentItem(request, finishDate);
     }
 }

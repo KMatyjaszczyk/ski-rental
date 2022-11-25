@@ -20,7 +20,7 @@ public class RentItemService {
                 .orElseThrow(() -> new RentItemNotFoundException(rentId, itemId));
     }
 
-    public void returnRentItem(ReturnRentItemRequest request, Instant finishDate) {
+    public void returnSingleRentItem(ReturnRentItemRequest request, Instant finishDate) {
         RentItem rentItem = findByRentIdAndItemId(request.getRentId(), request.getItemId());
 
         rentItem.setRentedTo(finishDate);

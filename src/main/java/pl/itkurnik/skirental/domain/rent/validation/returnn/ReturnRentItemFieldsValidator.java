@@ -10,7 +10,7 @@ import pl.itkurnik.skirental.util.validation.ValidationException;
 import java.util.List;
 
 @Component
-class ReturnRentItemsFieldsValidator extends MultipleFieldsValidator<ReturnRentItemRequest> {
+class ReturnRentItemFieldsValidator extends MultipleFieldsValidator<ReturnRentItemRequest> {
 
     @Override
     protected void processFieldsValidation(ReturnRentItemRequest request, List<String> errorMessages) {

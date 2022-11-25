@@ -8,15 +8,15 @@ import pl.itkurnik.skirental.domain.rent.validation.RentValidator;
 @Component
 @RequiredArgsConstructor
 public class ReturnRentItemValidator {
-    private final ReturnRentItemsFieldsValidator fieldsValidator;
+    private final ReturnRentItemFieldsValidator fieldsValidator;
     private final RentValidator rentValidator;
     private final ItemForReturnRentItemValidator itemValidator;
     private final RentItemForReturnRentItemValidator rentItemValidator;
 
-    public void validate(ReturnRentItemRequest request) {
+    public void validateReturnSingleItem(ReturnRentItemRequest request) {
         fieldsValidator.validateFields(request);
         rentValidator.validateIfRentIsInRentedState(request.getRentId());
         itemValidator.validateById(request.getItemId());
-        rentItemValidator.validateByRequest(request);
+        rentItemValidator.validateByRentAndItem(request.getRentId(), request.getItemId());
     }
 }
