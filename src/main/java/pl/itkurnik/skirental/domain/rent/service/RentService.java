@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.service.ItemStatusChanger;
 import pl.itkurnik.skirental.domain.rent.Rent;
+import pl.itkurnik.skirental.domain.rent.RentItem;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
 import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
 import pl.itkurnik.skirental.domain.rent.repository.RentRepository;
+import pl.itkurnik.skirental.domain.rent.validation.returnn.ReturnRentItemValidator;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
@@ -21,7 +23,7 @@ public class RentService {
     private final RentCreator rentCreator;
     private final RentItemsCreator rentItemsCreator;
     private final ItemStatusChanger itemStatusChanger;
-    private final RentItemsReturner rentItemsReturner;
+    private final ReturnRentItemValidator returnRentItemValidator;
     private final RentFinisher rentFinisher;
     private final RentItemService rentItemService;
 
@@ -58,6 +60,8 @@ public class RentService {
 
     @Transactional
     public void returnItem(ReturnRentItemRequest request) {
+        returnRentItemValidator.validateReturnSingleItem(request);
+
         Instant finishDate = Instant.now();
 
         returnItem(request, finishDate);
@@ -65,12 +69,17 @@ public class RentService {
     }
 
     private void returnItem(ReturnRentItemRequest request, Instant finishDate) {
-        rentItemsReturner.returnItem(request, finishDate);
+        Integer rentItemId = rentItemService.findByRentIdAndItemId(
+                request.getRentId(), request.getItemId()).getId();
+
+        rentItemService.returnSingleRentItem(rentItemId, finishDate);
         itemStatusChanger.changeToOpen(request.getItemId());
     }
 
     @Transactional
     public void finishRentById(Integer rentId) {
+        returnRentItemValidator.validateReturnMultipleItems(rentId);
+
         Instant finishDate = Instant.now();
 
         returnAllRentedItems(rentId, finishDate);
@@ -78,16 +87,25 @@ public class RentService {
     }
 
     private void returnAllRentedItems(Integer rentId, Instant finishDate) {
-        List<Integer> rentedItemsIds = receiveRentedItemsIds(rentId);
+        List<RentItem> rentedRentItems = rentItemService.findAllRentedRentItems(rentId);
 
-        rentItemsReturner.returnAllRentedItems(rentId, finishDate);
-        itemStatusChanger.changeAllToOpen(rentedItemsIds);
+        returnItems(rentedRentItems, finishDate);
+        changeItemsStatus(rentedRentItems);
     }
 
-    private List<Integer> receiveRentedItemsIds(Integer rentId) {
-        return rentItemService.findAllRentedRentItems(rentId)
-                .stream()
+    private void returnItems(List<RentItem> rentedRentItems, Instant finishDate) {
+        List<Integer> rentedRentItemsIds = rentedRentItems.stream()
+                .map(RentItem::getId)
+                .collect(Collectors.toList());
+
+        rentItemService.returnMultipleRentItems(rentedRentItemsIds, finishDate);
+    }
+
+    private void changeItemsStatus(List<RentItem> rentedRentItems) {
+        List<Integer> rentedItemsIds = rentedRentItems.stream()
                 .map(rentItem -> rentItem.getItem().getId())
                 .collect(Collectors.toList());
+
+        itemStatusChanger.changeAllToOpen(rentedItemsIds);
     }
 }

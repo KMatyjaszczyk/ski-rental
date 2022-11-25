@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.rent.RentItem;
 import pl.itkurnik.skirental.domain.rent.RentItemStatuses;
-import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
 import pl.itkurnik.skirental.domain.rent.exception.RentItemNotFoundException;
 import pl.itkurnik.skirental.domain.rent.repository.RentItemRepository;
 
@@ -36,12 +35,17 @@ public class RentItemService {
                 .orElseThrow(() -> new RentItemNotFoundException(rentId, itemId));
     }
 
-    public void returnSingleRentItem(ReturnRentItemRequest request, Instant finishDate) {
-        RentItem rentItem = findByRentIdAndItemId(request.getRentId(), request.getItemId());
+    public void returnSingleRentItem(Integer rentItemId, Instant finishDate) {
+        RentItem rentItem = findById(rentItemId);
 
         RentItem returnedRentItem = mapToReturned(rentItem, finishDate);
 
         rentItemRepository.saveAndFlush(returnedRentItem);
+    }
+
+    private RentItem findById(Integer id) {
+        return rentItemRepository.findById(id)
+                .orElseThrow(() -> new RentItemNotFoundException(id));
     }
 
     private RentItem mapToReturned(RentItem rentItem, Instant finishDate) {
@@ -51,8 +55,8 @@ public class RentItemService {
         return rentItem;
     }
 
-    public void returnMultipleRentItems(Integer rentId, Instant finishDate) {
-        List<RentItem> rentedItems = findAllRentedRentItems(rentId);
+    public void returnMultipleRentItems(List<Integer> rentItemsIds, Instant finishDate) {
+        List<RentItem> rentedItems = rentItemRepository.findAllById(rentItemsIds);
 
         List<RentItem> newlyReturnedRentItems = rentedItems.stream()
                 .map(rentItem -> mapToReturned(rentItem, finishDate))
