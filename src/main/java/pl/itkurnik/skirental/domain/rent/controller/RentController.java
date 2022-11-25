@@ -114,4 +114,17 @@ public class RentController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
+
+    @PutMapping("/finish/{id}")
+    public ResponseEntity<Void> finishById(@PathVariable Integer id) {
+        try {
+            log.info("Finishing rent with id {}", id);
+            rentService.finishRentById(id);
+            log.info("Rent with id {} successfully finished", id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e); // TODO KM change message
+        }
+    }
 }

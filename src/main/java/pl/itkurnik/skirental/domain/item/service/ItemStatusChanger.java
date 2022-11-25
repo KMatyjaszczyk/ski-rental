@@ -40,4 +40,8 @@ public class ItemStatusChanger {
 
         itemRepository.saveAll(itemsToModify);
     }
+
+    public void changeAllToOpen(List<Integer> itemsIds) {
+        changeItemsStatus(itemsIds, itemStatusService.getOpenStatus());
+    }
 }

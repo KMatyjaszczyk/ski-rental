@@ -32,9 +32,15 @@ public class RentFinisher {
     }
 
     private void finishRent(Rent rent, Instant finishDate) {
+        Rent finishedRent = mapRentToFinished(rent, finishDate);
+
+        rentRepository.save(finishedRent);
+    }
+
+    private Rent mapRentToFinished(Rent rent, Instant finishDate) {
         rent.setRentStatus(rentStatusService.getFinishedStatus());
         rent.setEndDate(finishDate);
 
-        rentRepository.save(rent);
+        return rent;
     }
 }

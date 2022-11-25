@@ -18,4 +18,10 @@ class RentItemsReturner {
 
         rentItemService.returnSingleRentItem(request, finishDate);
     }
+
+    public void returnAllRentedItems(Integer rentId, Instant finishDate) {
+        returnRentItemValidator.validateReturnMultipleItems(rentId);
+
+        rentItemService.returnMultipleRentItems(rentId, finishDate);
+    }
 }

@@ -12,6 +12,7 @@ import pl.itkurnik.skirental.domain.rent.repository.RentRepository;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class RentService {
     private final ItemStatusChanger itemStatusChanger;
     private final RentItemsReturner rentItemsReturner;
     private final RentFinisher rentFinisher;
+    private final RentItemService rentItemService;
 
     public List<Rent> findAll() {
         return rentRepository.findAll();
@@ -65,5 +67,27 @@ public class RentService {
     private void returnItem(ReturnRentItemRequest request, Instant finishDate) {
         rentItemsReturner.returnItem(request, finishDate);
         itemStatusChanger.changeToOpen(request.getItemId());
+    }
+
+    @Transactional
+    public void finishRentById(Integer rentId) {
+        Instant finishDate = Instant.now();
+
+        returnAllRentedItems(rentId, finishDate);
+        rentFinisher.finishRentIfNecessary(rentId, finishDate);
+    }
+
+    private void returnAllRentedItems(Integer rentId, Instant finishDate) {
+        List<Integer> rentedItemsIds = receiveRentedItemsIds(rentId);
+
+        rentItemsReturner.returnAllRentedItems(rentId, finishDate);
+        itemStatusChanger.changeAllToOpen(rentedItemsIds);
+    }
+
+    private List<Integer> receiveRentedItemsIds(Integer rentId) {
+        return rentItemService.findAllRentedRentItems(rentId)
+                .stream()
+                .map(rentItem -> rentItem.getItem().getId())
+                .collect(Collectors.toList());
     }
 }
