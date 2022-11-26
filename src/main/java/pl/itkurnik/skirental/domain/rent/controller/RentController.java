@@ -103,7 +103,7 @@ public class RentController {
         } catch (RentNotFoundException | ItemNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (ReturnRentItemsValidationException | ObjectNotFoundException e){
+        } catch (ReturnRentItemsValidationException | ObjectNotFoundException e) {
             log.info(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (IllegalStateException e) {
@@ -122,9 +122,18 @@ public class RentController {
             rentService.finishRentById(id);
             log.info("Rent with id {} successfully finished", id);
             return ResponseEntity.ok().build();
+        } catch (RentNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ReturnRentItemsValidationException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e); // TODO KM change message
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
 }
