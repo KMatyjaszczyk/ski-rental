@@ -3,7 +3,7 @@ package pl.itkurnik.skirental.domain.rent.validation.create;
 import org.springframework.stereotype.Component;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.exception.CreateRentValidationException;
-import pl.itkurnik.skirental.domain.rent.validation.RentItemsIdsListValidator;
+import pl.itkurnik.skirental.util.validation.ItemsIdsListValidator;
 import pl.itkurnik.skirental.util.validation.EmptyStringValidator;
 import pl.itkurnik.skirental.util.validation.MultipleFieldsValidator;
 import pl.itkurnik.skirental.util.validation.NullObjectValidator;
@@ -22,7 +22,7 @@ class CreateRentFieldsValidator extends MultipleFieldsValidator<CreateRentReques
         NullObjectValidator.validate(request.getClientDocumentTypeId(), "Client document type", errorMessages);
         EmptyStringValidator.validate(request.getClientDocumentNumber(), "Client document number", errorMessages);
         NullObjectValidator.validate(request.getEmployeeId(), "Employee id", errorMessages);
-        RentItemsIdsListValidator.validate(request.getRentItemsIds(), errorMessages);
+        ItemsIdsListValidator.validate(request.getRentItemsIds(), errorMessages);
     }
 
     private void validatePlannedReturnDate(LocalDate plannedReturnDate, List<String> errorMessages) {

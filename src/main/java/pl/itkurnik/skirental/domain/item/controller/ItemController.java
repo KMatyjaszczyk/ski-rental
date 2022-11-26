@@ -10,16 +10,15 @@ import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.equipment.exception.EquipmentNotFoundException;
 import pl.itkurnik.skirental.domain.equipment.exception.SizeNotFoundException;
 import pl.itkurnik.skirental.domain.item.Item;
+import pl.itkurnik.skirental.domain.item.dto.CalculateItemsRentCostRequest;
 import pl.itkurnik.skirental.domain.item.dto.CreateItemRequest;
 import pl.itkurnik.skirental.domain.item.dto.ItemInfoDto;
 import pl.itkurnik.skirental.domain.item.dto.UpdateItemRequest;
-import pl.itkurnik.skirental.domain.item.exception.CreateItemValidationException;
-import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
-import pl.itkurnik.skirental.domain.item.exception.ItemStatusNotFoundException;
-import pl.itkurnik.skirental.domain.item.exception.UpdateItemValidationException;
+import pl.itkurnik.skirental.domain.item.exception.*;
 import pl.itkurnik.skirental.domain.item.service.ItemService;
 import pl.itkurnik.skirental.domain.item.util.ItemMapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static pl.itkurnik.skirental.api.Constants.CROSS_ORIGIN_MAX_AGE;
@@ -144,6 +143,22 @@ public class ItemController {
             itemService.deleteById(id);
             log.info("Item with ID {} successfully deleted", id);
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
+    @GetMapping("/items/cost")
+    public ResponseEntity<BigDecimal> calculateItemsRentCost(@RequestBody CalculateItemsRentCostRequest request) {
+        try {
+            log.info("Calculating items cost for rent from {} to {}", request.getDateFrom(), request.getDateTo());
+            BigDecimal itemsRentCost = itemService.calculateItemsRentCost(request);
+            log.info("Items cost for rent from {} to {} calculated successfully", request.getDateFrom(), request.getDateTo());
+            return ResponseEntity.ok(itemsRentCost);
+        } catch (CalculateItemsRentCostValidationException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);

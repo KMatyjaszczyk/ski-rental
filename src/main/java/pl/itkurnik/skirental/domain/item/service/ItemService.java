@@ -11,13 +11,11 @@ import pl.itkurnik.skirental.domain.equipment.service.SizeService;
 import pl.itkurnik.skirental.domain.item.Item;
 import pl.itkurnik.skirental.domain.item.ItemStatus;
 import pl.itkurnik.skirental.domain.item.Price;
-import pl.itkurnik.skirental.domain.item.dto.CreateItemRequest;
-import pl.itkurnik.skirental.domain.item.dto.CreatePriceRequest;
-import pl.itkurnik.skirental.domain.item.dto.PriceForCreateItemRequest;
-import pl.itkurnik.skirental.domain.item.dto.UpdateItemRequest;
+import pl.itkurnik.skirental.domain.item.dto.*;
 import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
 import pl.itkurnik.skirental.domain.item.repository.ItemRepository;
 import pl.itkurnik.skirental.domain.item.repository.PriceRepository;
+import pl.itkurnik.skirental.domain.item.validation.CalculateItemsRentCostFieldsValidator;
 import pl.itkurnik.skirental.domain.item.validation.CreateItemValidator;
 import pl.itkurnik.skirental.domain.item.validation.UpdateItemValidator;
 
@@ -39,6 +37,7 @@ public class ItemService {
     private final ItemStatusService itemStatusService;
     private final CreateItemValidator createItemValidator;
     private final UpdateItemValidator updateItemValidator;
+    private final CalculateItemsRentCostFieldsValidator calculateItemsRentCostFieldsValidator;
 
     public List<Item> findAll() {
         return itemRepository.findAll();
@@ -177,5 +176,17 @@ public class ItemService {
         createPriceRequest.setPriceValue(priceValueFromRequest);
 
         itemPricesService.createPriceForItem(createPriceRequest);
+    }
+
+    public BigDecimal calculateItemsRentCost(CalculateItemsRentCostRequest request) {
+        calculateItemsRentCostFieldsValidator.validateFields(request);
+
+        List<Item> items = itemRepository.findAllById(request.getItemsIds());
+        List<Price> itemPrices = items.stream()
+                .map(item -> itemPricesService.findActualPriceForItemByItemId(item.getId()))
+                .collect(Collectors.toList());
+        ItemsRentCostCalculator calculator = new ItemsRentCostCalculator(itemPrices);
+
+        return calculator.calculate(request.getDateFrom(), request.getDateTo());
     }
 }
