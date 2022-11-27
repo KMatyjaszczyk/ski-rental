@@ -31,6 +31,19 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping
+    public ResponseEntity<List<UserInfoDto>> findAll() {
+        try {
+            log.info("Receiving all users");
+            List<User> users = userService.findAll();
+            log.info("All users received successfully");
+            return ResponseEntity.ok(UserMapper.mapAllToInfoDto(users));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
     @GetMapping("/client")
     public ResponseEntity<List<UserInfoDto>> findAllClients() {
         try {

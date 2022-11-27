@@ -38,6 +38,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(email));
     }
 
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
     public List<User> findAllClients() {
         Set<Role> clientRoleSingleton = Collections.singleton(roleService.getClientRole());
 
