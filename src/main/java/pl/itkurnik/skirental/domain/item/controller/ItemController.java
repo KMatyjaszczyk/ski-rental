@@ -149,7 +149,7 @@ public class ItemController {
         }
     }
 
-    @GetMapping("/items/cost")
+    @PostMapping("/items/cost")
     public ResponseEntity<BigDecimal> calculateItemsRentCost(@RequestBody CalculateItemsRentCostRequest request) {
         try {
             log.info("Calculating items cost for rent from {} to {}", request.getDateFrom(), request.getDateTo());
