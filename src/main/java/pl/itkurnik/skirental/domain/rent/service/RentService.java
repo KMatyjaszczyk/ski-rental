@@ -9,11 +9,15 @@ import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
 import pl.itkurnik.skirental.domain.rent.dto.ReturnRentItemRequest;
 import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
 import pl.itkurnik.skirental.domain.rent.repository.RentRepository;
+import pl.itkurnik.skirental.domain.rent.validation.RentValidator;
 import pl.itkurnik.skirental.domain.rent.validation.returnn.ReturnRentItemValidator;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +30,8 @@ public class RentService {
     private final ReturnRentItemValidator returnRentItemValidator;
     private final RentFinisher rentFinisher;
     private final RentItemService rentItemService;
+    private final RentValidator rentValidator;
+    private final ZoneId zoneId;
 
     public List<Rent> findAll() {
         return rentRepository.findAll();
@@ -107,5 +113,15 @@ public class RentService {
                 .collect(Collectors.toList());
 
         itemStatusChanger.changeAllToOpen(rentedItemsIds);
+    }
+
+    public BigDecimal calculateCostForRentById(Integer rentId) {
+        rentValidator.validateIfRentIsInFinishedState(rentId);
+
+        Rent rent = findById(rentId);
+        Set<RentItem> rentItems = rent.getRentItems();
+        RentCostCalculator rentCostCalculator = new RentCostCalculator(rentItems, zoneId);
+
+        return rentCostCalculator.calculate();
     }
 }
