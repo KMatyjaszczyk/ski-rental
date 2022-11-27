@@ -156,4 +156,20 @@ public class RentController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
+
+    @GetMapping("/{id}/payments")
+    public ResponseEntity<BigDecimal> calculatePaymentsAmountById(@PathVariable Integer id) {
+        try {
+            log.info("Calculating payments amount for rent with id {}", id);
+            BigDecimal paymentsAmount = rentService.calculatePaymentsAmountById(id);
+            log.info("Payments amount for rent with id {} calculated successfully", id);
+            return ResponseEntity.ok(paymentsAmount);
+        } catch (RentNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 }

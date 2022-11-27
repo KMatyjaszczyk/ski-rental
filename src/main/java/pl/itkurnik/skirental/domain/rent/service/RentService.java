@@ -3,6 +3,7 @@ package pl.itkurnik.skirental.domain.rent.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.itkurnik.skirental.domain.item.service.ItemStatusChanger;
+import pl.itkurnik.skirental.domain.payment.Payment;
 import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.RentItem;
 import pl.itkurnik.skirental.domain.rent.dto.CreateRentRequest;
@@ -123,5 +124,13 @@ public class RentService {
         RentCostCalculator rentCostCalculator = new RentCostCalculator(rentItems, zoneId);
 
         return rentCostCalculator.calculate();
+    }
+
+    public BigDecimal calculatePaymentsAmountById(Integer rentId) {
+        Rent rent = findById(rentId);
+
+        return rent.getPayments().stream()
+                .map(Payment::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

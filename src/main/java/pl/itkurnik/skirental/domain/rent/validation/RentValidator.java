@@ -27,6 +27,16 @@ public class RentValidator {
     }
 
     public void validateIfRentIsInFinishedState(Integer rentId) {
-        validateIfRentIsInState(rentId, RentStatuses.FINISHED);
+        validateIfRentIsNotInState(rentId, RentStatuses.RENTED);
+    }
+
+    public void validateIfRentIsNotInState(Integer rentId, RentStatuses stateToValidate) {
+        Rent rent = rentRepository.findById(rentId)
+                .orElseThrow(() -> new RentNotFoundException(rentId));
+
+        if (stateToValidate.getName().equals(rent.getRentStatus().getName())) {
+            throw new IllegalStateException(String.format(
+                    "Rent with id %d is in %s state", rentId, stateToValidate.getName()));
+        }
     }
 }
