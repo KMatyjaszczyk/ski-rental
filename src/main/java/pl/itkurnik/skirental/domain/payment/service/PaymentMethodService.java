@@ -37,4 +37,14 @@ public class PaymentMethodService {
 
         paymentMethodRepository.save(paymentMethod);
     }
+
+    public void deleteById(Integer id) {
+        boolean paymentMethodDoesNotExist = !paymentMethodRepository.existsById(id);
+
+        if (paymentMethodDoesNotExist) {
+            return;
+        }
+
+        paymentMethodRepository.deleteById(id);
+    }
 }
