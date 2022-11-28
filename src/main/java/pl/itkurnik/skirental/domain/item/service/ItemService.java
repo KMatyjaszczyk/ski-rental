@@ -10,6 +10,7 @@ import pl.itkurnik.skirental.domain.equipment.service.EquipmentService;
 import pl.itkurnik.skirental.domain.equipment.service.SizeService;
 import pl.itkurnik.skirental.domain.item.Item;
 import pl.itkurnik.skirental.domain.item.ItemStatus;
+import pl.itkurnik.skirental.domain.item.ItemStatuses;
 import pl.itkurnik.skirental.domain.item.Price;
 import pl.itkurnik.skirental.domain.item.dto.*;
 import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
@@ -38,6 +39,7 @@ public class ItemService {
     private final CreateItemValidator createItemValidator;
     private final UpdateItemValidator updateItemValidator;
     private final CalculateItemsRentCostFieldsValidator calculateItemsRentCostFieldsValidator;
+    private final ItemStatusChanger itemStatusChanger;
 
     public List<Item> findAll() {
         return itemRepository.findAll();
@@ -188,5 +190,35 @@ public class ItemService {
         ItemsRentCostCalculator calculator = new ItemsRentCostCalculator(itemPrices);
 
         return calculator.calculate(request.getDateFrom(), request.getDateTo());
+    }
+
+    public void changeStatusToOpen(Integer itemId) {
+        Item item = findById(itemId);
+        validateIfItemIsNotInRentedState(item);
+
+        itemStatusChanger.changeToOpen(itemId);
+    }
+
+    private void validateIfItemIsNotInRentedState(Item item) {
+        boolean itemIsInRentedState = item.getItemStatus().getName().equals(
+                ItemStatuses.RENTED.getName());
+
+        if (itemIsInRentedState) {
+            throw new IllegalStateException(String.format("Item with id %d is rented, return it first", item.getId()));
+        }
+    }
+
+    public void changeStatusToBroken(Integer itemId) {
+        Item item = findById(itemId);
+        validateIfItemIsNotInRentedState(item);
+
+        itemStatusChanger.changeToBroken(itemId);
+    }
+    
+    public void changeStatusToInService(Integer itemId) {
+        Item item = findById(itemId);
+        validateIfItemIsNotInRentedState(item);
+
+        itemStatusChanger.changeToInService(itemId);
     }
 }

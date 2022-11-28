@@ -164,4 +164,61 @@ public class ItemController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
+
+    @PutMapping("/{id}/status/open")
+    public ResponseEntity<Void> changeStatusToOpenId(@PathVariable Integer id) {
+        try {
+            log.info("Changing status of item with id {} to open", id);
+            itemService.changeStatusToOpen(id);
+            log.info("Status of item with id {} to open changed successfully", id);
+            return ResponseEntity.ok().build();
+        } catch (ItemNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
+    @PutMapping("/{id}/status/broken")
+    public ResponseEntity<Void> changeStatusToBrokenById(@PathVariable Integer id) {
+        try {
+            log.info("Changing status of item with id {} to broken", id);
+            itemService.changeStatusToBroken(id);
+            log.info("Status of item with id {} to broken changed successfully", id);
+            return ResponseEntity.ok().build();
+        } catch (ItemNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
+
+    @PutMapping("/{id}/status/in_service")
+    public ResponseEntity<Void> changeStatusToInServiceById(@PathVariable Integer id) {
+        try {
+            log.info("Changing status of item with id {} to in service", id);
+            itemService.changeStatusToInService(id);
+            log.info("Status of item with id {} to in service changed successfully", id);
+            return ResponseEntity.ok().build();
+        } catch (ItemNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 }

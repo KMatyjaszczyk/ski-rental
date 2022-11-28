@@ -7,6 +7,7 @@ import pl.itkurnik.skirental.domain.item.ItemStatus;
 import pl.itkurnik.skirental.domain.item.exception.ItemNotFoundException;
 import pl.itkurnik.skirental.domain.item.repository.ItemRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -24,6 +25,20 @@ public class ItemStatusChanger {
                 .orElseThrow(() -> new ItemNotFoundException(itemId));
 
         item.setItemStatus(statusToModify);
+
+        itemRepository.save(item);
+    }
+
+    public void changeToBroken(Integer itemId) {
+        changeItemStatus(itemId, itemStatusService.getBrokenStatus());
+    }
+
+    public void changeToInService(Integer itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new ItemNotFoundException(itemId));
+
+        item.setLastServiceDate(LocalDate.now());
+        item.setItemStatus(itemStatusService.getInServiceStatus());
 
         itemRepository.save(item);
     }
