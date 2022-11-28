@@ -80,7 +80,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void updateProperFields(UpdateUserRequest request, User user) { // TODO KM check if user is registered - if not, email cannot be set, register logic necessary
+    private void updateProperFields(UpdateUserRequest request, User user) {
         if (!StringUtils.equals(request.getName(), user.getName())) {
             user.setName(request.getName());
         }
@@ -91,6 +91,15 @@ public class UserService {
 
         if (!StringUtils.equals(request.getPhoneNumber(), user.getPhoneNumber())) {
             user.setPhoneNumber(request.getPhoneNumber());
+        }
+
+        updateEmailIfPossible(request, user);
+    }
+
+    private void updateEmailIfPossible(UpdateUserRequest request, User user) {
+        boolean userIsNotRegistered = !user.getIsRegistered();
+        if (userIsNotRegistered) {
+            return;
         }
 
         if (!StringUtils.equals(request.getEmail(), user.getEmail())) {
