@@ -46,7 +46,7 @@ public class EquipmentService {
 
     public void deleteById(Integer id) {
         try {
-            equipmentRepository.deleteById(id); // TODO KM preferred will be setting flag 'deleted'
+            equipmentRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ignored) {
             log.info("Equipment with ID {} already deleted", id);
         }

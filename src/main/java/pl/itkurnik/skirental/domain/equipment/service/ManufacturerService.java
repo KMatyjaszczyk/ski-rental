@@ -34,7 +34,7 @@ public class ManufacturerService {
 
     public void deleteById(Integer id) {
         try {
-            manufacturerRepository.deleteById(id); // TODO KM preferred will be setting flag 'deleted'
+            manufacturerRepository.deleteById(id);
         } catch (EmptyResultDataAccessException ignored) {
             log.info("Manufacturer with ID {} already deleted", id);
         }
