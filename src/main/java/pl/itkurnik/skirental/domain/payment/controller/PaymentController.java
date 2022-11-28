@@ -10,9 +10,11 @@ import pl.itkurnik.skirental.api.Constants;
 import pl.itkurnik.skirental.domain.payment.Payment;
 import pl.itkurnik.skirental.domain.payment.dto.CreatePaymentRequest;
 import pl.itkurnik.skirental.domain.payment.dto.PaymentInfoDto;
+import pl.itkurnik.skirental.domain.payment.exception.CreatePaymentValidationException;
 import pl.itkurnik.skirental.domain.payment.exception.PaymentNotFoundException;
 import pl.itkurnik.skirental.domain.payment.service.PaymentService;
 import pl.itkurnik.skirental.domain.payment.util.PaymentMapper;
+import pl.itkurnik.skirental.util.error.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -63,9 +65,15 @@ public class PaymentController {
             paymentService.create(request);
             log.info("Payment for rent with id {} created successfully", request.getRentId());
             return ResponseEntity.ok().build();
+        } catch (CreatePaymentValidationException | ObjectNotFoundException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            log.info(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e); // TODO proper handling here
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
         }
     }
 }

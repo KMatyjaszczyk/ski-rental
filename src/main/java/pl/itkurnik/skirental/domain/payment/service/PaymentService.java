@@ -6,6 +6,8 @@ import pl.itkurnik.skirental.domain.payment.Payment;
 import pl.itkurnik.skirental.domain.payment.PaymentMethod;
 import pl.itkurnik.skirental.domain.payment.dto.CreatePaymentRequest;
 import pl.itkurnik.skirental.domain.payment.repository.PaymentRepository;
+import pl.itkurnik.skirental.domain.payment.validation.CreatePaymentFieldsValidator;
+import pl.itkurnik.skirental.domain.payment.validation.PaymentValidator;
 import pl.itkurnik.skirental.domain.rent.Rent;
 import pl.itkurnik.skirental.domain.rent.exception.RentNotFoundException;
 import pl.itkurnik.skirental.domain.rent.service.RentService;
@@ -22,6 +24,8 @@ public class PaymentService {
     private final RentService rentService;
     private final PaymentMethodService paymentMethodService;
     private final RentStatusChanger rentStatusChanger;
+    private final CreatePaymentFieldsValidator createPaymentFieldsValidator;
+    private final PaymentValidator paymentValidator;
 
     public Payment findById(Integer id) {
         return paymentRepository.findById(id)
@@ -34,10 +38,15 @@ public class PaymentService {
 
     @Transactional
     public void create(CreatePaymentRequest request) {
-        // TODO KM validation here, rent must be finished
+        validateCreate(request);
 
         createPayment(request);
         rentStatusChanger.changeToPaidIfNecessary(request.getRentId());
+    }
+
+    private void validateCreate(CreatePaymentRequest request) {
+        createPaymentFieldsValidator.validateFields(request);
+        paymentValidator.validateCreate(request);
     }
 
     private void createPayment(CreatePaymentRequest request) {
