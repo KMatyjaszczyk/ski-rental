@@ -15,6 +15,12 @@ public class RentalDataService {
     private final RentalDataRepository rentalDataRepository;
     private final UpdateRentalDataValidator updateRentalDataValidator;
 
+    public RentalData getRentalData() {
+        return rentalDataRepository.findAll().stream()
+                .findFirst()
+                .orElseThrow(RentalDataNotFoundException::new);
+    }
+
     public void update(UpdateRentalDataRequest request) {
         updateRentalDataValidator.validateFields(request);
 
@@ -22,12 +28,6 @@ public class RentalDataService {
         updateProperFields(rentalData, request);
 
         rentalDataRepository.save(rentalData);
-    }
-
-    private RentalData getRentalData() {
-        return rentalDataRepository.findAll().stream()
-                .findFirst()
-                .orElseThrow(RentalDataNotFoundException::new);
     }
 
     private void updateProperFields(RentalData rentalData, UpdateRentalDataRequest request) {

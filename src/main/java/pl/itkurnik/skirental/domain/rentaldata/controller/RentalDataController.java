@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.itkurnik.skirental.api.Constants;
+import pl.itkurnik.skirental.domain.rentaldata.RentalData;
 import pl.itkurnik.skirental.domain.rentaldata.dto.UpdateRentalDataRequest;
 import pl.itkurnik.skirental.domain.rentaldata.exception.UpdateRentalDataValidationException;
 import pl.itkurnik.skirental.domain.rentaldata.service.RentalDataService;
@@ -21,6 +22,19 @@ import static pl.itkurnik.skirental.api.Constants.LOCALHOST_FRONTEND_APP_URL;
 @Slf4j
 public class RentalDataController {
     private final RentalDataService rentalDataService;
+
+    @GetMapping
+    public ResponseEntity<RentalData> getData() {
+        try {
+            log.info("Receiving rental data");
+            RentalData rentalData = rentalDataService.getRentalData();
+            log.info("Rental data received successfully");
+            return ResponseEntity.ok(rentalData);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constants.UNEXPECTED_ERROR_MESSAGE, e);
+        }
+    }
 
     @PutMapping
     public ResponseEntity<Void> update(@RequestBody UpdateRentalDataRequest request) {
